@@ -32,6 +32,6 @@
 *.app
 
 #folders
-!.vscode/
-!build/
+.vscode/
+build/
 
