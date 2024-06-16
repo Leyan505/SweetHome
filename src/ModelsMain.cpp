@@ -82,7 +82,7 @@ int main()
 
     // load models
     // -----------
-    Model exterior(FileSystem::getPath("Resources/Objects/exterior/Exterior.gltf"));
+    Model exterior(FileSystem::getPath("Resources/Objects/Exterior/Exterior.gltf"));
     
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
