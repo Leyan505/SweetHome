@@ -16,6 +16,7 @@
 *.so
 *.dylib
 *.dll
+!/dlls/*.dll
 
 # Fortran module files
 *.mod
@@ -26,6 +27,7 @@
 *.la
 *.a
 *.lib
+!/lib/*.lib
 
 # Executables
 *.exe
@@ -35,4 +37,4 @@
 #folders
 .vscode/
 build/
-
+bin/

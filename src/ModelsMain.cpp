@@ -1,10 +1,11 @@
 #include "glad.h"
 #include <GLFW/glfw3.h>
-
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <filesystem.h>
 #include <Headers/shader_m.h>
 #include <Headers/Camera.h>
 #include <Headers/model.h>
@@ -77,13 +78,11 @@ int main()
 
     // build and compile shaders
     // -------------------------
-    Shader ourShader("/home/leyan/OpenGLPractice/ModelPractice/Models/Resources/Shaders/1.model_loading.vs", "/home/leyan/OpenGLPractice/ModelPractice/Models/Resources/Shaders/1.model_loading.fs");
+    Shader ourShader("1.model_loading.vs", "1.model_loading.fs");
 
     // load models
     // -----------
-    Model exterior("/home/leyan/OpenGLPractice/ModelPractice/Models/Resources/Objects/Exterior/Exterior.gltf");
-    Model corridor ("/home/leyan/OpenGLPractice/ModelPractice/Models/Resources/Objects/CorridorObj/corridor.obj");
-
+    Model exterior(FileSystem::getPath("Resources/Objects/exterior/Exterior.gltf"));
     
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -123,11 +122,11 @@ int main()
         ourShader.setMat4("model", model);
         exterior.Draw(ourShader);
 
-        model = glm::mat4(1.0f);
+       /*model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
-        corridor.Draw(ourShader);
+        corridor.Draw(ourShader);*/
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
