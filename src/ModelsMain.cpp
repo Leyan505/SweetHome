@@ -15,10 +15,10 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow* window, const Model& modelo);
+void processInput(GLFWwindow* window, const Model& modelo, int mode, glm::vec3 position , glm::vec3 scale);
 //funciones
-bool CheckCollision(const Camera& camera, const Model& model);
-void resolveCollision(Camera& camera, const Model& model);
+bool CheckCollision(const Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
+void resolveCollision(Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
 
 // settings
 const unsigned int SCR_WIDTH = 1920;
@@ -87,6 +87,7 @@ int main()
     // -----------
     //Model exterior(FileSystem::getPath("Resources/Objects/coralineMonsterHouse/coralineMonsterHouse.gltf"));
     Model corridor(FileSystem::getPath("Resources/Objects/delusional/delusionalHallway.gltf"));
+    Model mae(FileSystem::getPath("Resources/Objects/table/table.gltf"));
 
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -101,21 +102,24 @@ int main()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // input
-        // -----
-        processInput(window, corridor);
+        
 
         // render
         // ------
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glm::vec3 maePos = glm::vec3(0.0f, -1.5f, 0.0f);
+        glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 1.0f);
 
-        //esto va dentro del main
-        if (!CheckCollision(camera, corridor)) {
-            // Si hay colisión, realiza alguna acción
+        if (CheckCollision(camera, mae, maePos, maeScale)) {
+            processInput(window, mae, 1, maePos, maeScale);
             std::cout << "¡Colision detectada!" << std::endl;
-            resolveCollision(camera, corridor);
         }
+        else{
+            // input
+            // -----
+            processInput(window, corridor, 0, glm::vec3(0.0f), glm::vec3(1.0f));
+            }
 
         // don't forget to enable shader before setting uniforms
         ourShader.use();
@@ -128,10 +132,11 @@ int main()
 
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
-        /*model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
-        exterior.Draw(ourShader);*/
+        mae.Draw(ourShader);
+        
 
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
@@ -153,37 +158,73 @@ int main()
 }
 
 //esto va en el main
-void processInput(GLFWwindow* window, const Model& modelo)
+void processInput(GLFWwindow* window, const Model& modelo, int mode, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
     camera.Position.y = 0.0f;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+    if (mode == 1)
+    {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         glm::vec3 front = camera.Front;
         glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
-        if (CheckCollision(newPos, modelo))
+        if (!CheckCollision(newPos, modelo, position, scale))
             camera.Position = newPos;
-        else resolveCollision(camera, modelo);
+        else resolveCollision(camera, modelo, position, scale);
+        
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            glm::vec3 front = camera.Front;
+            glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
+            if (!CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+            else resolveCollision(camera, modelo, position, scale);
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            glm::vec3 right = camera.Right;
+            glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
+            if (!CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+            else resolveCollision(camera, modelo, position, scale);
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            glm::vec3 right = camera.Right;
+            glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
+            if (!CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+            else resolveCollision(camera, modelo, position, scale);
+        }
     }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        glm::vec3 front = camera.Front;
-        glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
-        if (CheckCollision(newPos, modelo))
-            camera.Position = newPos;
-        else resolveCollision(camera, modelo);
+    else
+    {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            glm::vec3 front = camera.Front;
+            glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
+            if (CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+            else resolveCollision(camera, modelo, position, scale);
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            glm::vec3 front = camera.Front;
+            glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
+            if (CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+            else resolveCollision(camera, modelo, position, scale);
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            glm::vec3 right = camera.Right;
+            glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
+            if (CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+            else resolveCollision(camera, modelo, position, scale);
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            glm::vec3 right = camera.Right;
+            glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
+            if (CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+            else resolveCollision(camera, modelo, position, scale);
+        }
     }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        glm::vec3 right = camera.Right;
-        glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
-        if (CheckCollision(newPos, modelo))
-            camera.Position = newPos;
-        else resolveCollision(camera, modelo);
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        glm::vec3 right = camera.Right;
-        glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
-        if (CheckCollision(newPos, modelo))
-            camera.Position = newPos;
-        else resolveCollision(camera, modelo);
-    }
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
@@ -229,16 +270,29 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 }
 
 //funciones
- bool CheckCollision(const Camera & camera, const Model & model) {
+ bool CheckCollision(const Camera & camera, const Model & model, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) {
      // Obtenemos la posición de la cámara
      glm::vec3 cameraPos = camera.Position;
 
      // Iteramos sobre las mallas del modelo
      for (const auto& mesh : model.meshes) 
-     {
+     {  
          // Obtenemos la posición y dimensiones de la caja de colisión de la malla
          glm::vec3 minBox = mesh.boundingBox.min;
          glm::vec3 maxBox = mesh.boundingBox.max;
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, position); // translate it down so it's at the center of the scene
+        model = glm::scale(model, scale);	// it's a bit too big for our scene, so scale it down
+        minBox = model * glm::vec4(minBox,1.0f);
+        maxBox = model * glm::vec4(maxBox, 1.0f);
+
+        if(position == glm::vec3(0.0f))
+        {
+            minBox = minBox+0.1f;
+            maxBox = maxBox-0.1f;
+        }
+
 
          // Comprobamos si la posición de la cámara está dentro de la caja de colisión
          if (cameraPos.x >= minBox.x && cameraPos.x <= maxBox.x &&
@@ -255,16 +309,19 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
      return false;
  }
 
- void resolveCollision(Camera & camera, const Model & model) {
-     // Obtenemos la posición de la cámara
-     glm::vec3 cameraPos = camera.Position;
+ void resolveCollision(Camera & camera, const Model & model, glm::vec3 position, glm::vec3 scale = glm::vec3(1.0f)) {
 
      // Iteramos sobre las mallas del modelo
      for (const auto& mesh : model.meshes) 
      {
-         // Obtenemos la posición y dimensiones de la caja de colisión de la malla
-         glm::vec3 minBox = mesh.boundingBox.min;
-         glm::vec3 maxBox = mesh.boundingBox.max;
+        glm::vec3 minBox = mesh.boundingBox.min;
+        glm::vec3 maxBox = mesh.boundingBox.max;
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, position); // translate it down so it's at the center of the scene
+        model = glm::scale(model, scale);	// it's a bit too big for our scene, so scale it down
+        minBox = model * glm::vec4(minBox,1.0f);
+        maxBox = model * glm::vec4(maxBox, 1.0f);
 
         
         // Resolvemos la colisión ajustando ligeramente la dirección del movimiento

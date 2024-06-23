@@ -70,8 +70,8 @@ public:
         }
 
         BoundingBox box;
-        box.min = minPos+0.1f;
-        box.max = maxPos-0.1f;
+        box.min = minPos;
+        box.max = maxPos;
 
         return box;
     }
