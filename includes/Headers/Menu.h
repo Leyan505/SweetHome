@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define MAX_NUMBER_OPTIONS 4
+#define MAX_NUMBER_OPTIONS 5
 
 class Menu {
 public:

@@ -12,17 +12,19 @@ Menu::Menu(float width, float height) {
         option[i].setFont(font);
         option[i].setFillColor(sf::Color::White);
         option[i].setCharacterSize(50); // Tamaño de letra más grande
-        option[i].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OPTIONS + 1) * (i + 1)));
+        // Ajuste de la posición para estar más a la izquierda y más juntos verticalmente
+        option[i].setPosition(sf::Vector2f(100, height / (MAX_NUMBER_OPTIONS + 1) * (i + 1) * 0.5f + 300)); // Desplazamiento adicional
     }
 
     // Nombres de las opciones del menú
-    option[0].setString("Living Room");
-    option[1].setString("Kitchen");
-    option[2].setString("Bedroom");
-    option[3].setString("Hallway");
+    option[0].setString("Sala");
+    option[1].setString("Cocina");
+    option[2].setString("Habitacion");
+    option[3].setString("Pasillo");
+    option[4].setString("Creditos");
 
     selectedOpt = 0;
-    option[selectedOpt].setFillColor(sf::Color::Yellow); // Opción seleccionada en rojo
+    option[selectedOpt].setFillColor(sf::Color::Yellow); // Opción seleccionada en amarillo
 }
 
 // Constructor por defecto
