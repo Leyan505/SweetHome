@@ -1,39 +1,61 @@
 #include <Headers/Menu.h>
 #include <iostream>
 
-
-Menu::Menu(float width, float height)
-{
-    if(!font.loadFromFile("HalloweenPartySt-14pB.ttf"));
-    {
-        std::cout<<"ERROR LOADING FONT"<<std::endl;
+// Constructor del menú con parámetros
+Menu::Menu(float width, float height) {
+    if (!font.loadFromFile("HalloweenPartySt-14pB.ttf")) {
+        std::cout << "ERROR LOADING FONT" << std::endl;
     }
 
-    option[0].setFont(font);
-    option[0].setFillColor(sf::Color::White);
-    option[0].setString("Living Room");
-    option[0].setPosition(sf::Vector2f(width/2, height/(MAX_NUMBER_OPTIONS+1)*1));
+    // Configuración inicial de las opciones del menú
+    for (int i = 0; i < MAX_NUMBER_OPTIONS; ++i) {
+        option[i].setFont(font);
+        option[i].setFillColor(sf::Color::White);
+        option[i].setCharacterSize(50); // Tamaño de letra más grande
+        // Ajuste de la posición para estar más a la izquierda y más juntos verticalmente
+        option[i].setPosition(sf::Vector2f(100, height / (MAX_NUMBER_OPTIONS + 1) * (i + 1) * 0.5f + 300)); // Desplazamiento adicional
+    }
 
-    option[1].setFont(font);
-    option[1].setFillColor(sf::Color::White);
-    option[1].setString("Kitchen");
-    option[1].setPosition(sf::Vector2f(width/2, height/(MAX_NUMBER_OPTIONS+1)*2));
+    // Nombres de las opciones del menú
+    option[0].setString("Sala");
+    option[1].setString("Cocina");
+    option[2].setString("Habitacion");
+    option[3].setString("Pasillo");
+    option[4].setString("Creditos");
 
-    option[2].setFont(font);
-    option[2].setFillColor(sf::Color::White);
-    option[2].setString("Bedroom");
-    option[2].setPosition(sf::Vector2f(width/2, height/(MAX_NUMBER_OPTIONS+1)*3));
-
-    option[3].setFont(font);
-    option[3].setFillColor(sf::Color::White);
-    option[3].setString("Corridor");
-    option[3].setPosition(sf::Vector2f(width/2, height/(MAX_NUMBER_OPTIONS+1)*4));
+    selectedOpt = 0;
+    option[selectedOpt].setFillColor(sf::Color::Yellow); // Opción seleccionada en amarillo
 }
 
-void Menu::draw(sf::RenderWindow &window)
-{
-    for(int i = 0; i < MAX_NUMBER_OPTIONS; i++)
-    {
+// Constructor por defecto
+Menu::Menu() : Menu(800, 600) {}
+
+// Función para dibujar el menú
+void Menu::draw(sf::RenderWindow &window) {
+    for (int i = 0; i < MAX_NUMBER_OPTIONS; ++i) {
         window.draw(option[i]);
     }
+}
+
+// Función para mover la selección hacia arriba
+void Menu::moveUp() {
+    if (selectedOpt - 1 >= 0) {
+        option[selectedOpt].setFillColor(sf::Color::White);
+        selectedOpt--;
+        option[selectedOpt].setFillColor(sf::Color::Yellow);
+    }
+}
+
+// Función para mover la selección hacia abajo
+void Menu::moveDown() {
+    if (selectedOpt + 1 < MAX_NUMBER_OPTIONS) {
+        option[selectedOpt].setFillColor(sf::Color::White);
+        selectedOpt++;
+        option[selectedOpt].setFillColor(sf::Color::Yellow);
+    }
+}
+
+// Obtener la opción seleccionada
+int Menu::getPressedItem() {
+    return selectedOpt;
 }

@@ -66,23 +66,36 @@ add_library(GLAD "src/glad.c")
 set(LIBS ${LIBS} GLAD)
 
 #[[ Prueba Modelos]]
-add_executable(Main src/ModelsMain.cpp)
-target_link_libraries(Main PRIVATE ${LIBS})
-target_compile_features(Main PRIVATE cxx_std_17)
+#add_executable(Main src/ModelsMain.cpp)
+#target_link_libraries(Main PRIVATE ${LIBS})
+#target_compile_features(Main PRIVATE cxx_std_17)
+
+#Menu
+include(FetchContent)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.x)
+FetchContent_MakeAvailable(SFML)
+
+#[[Prueba Menu]]
+add_executable(main src/menuTest.cpp src/Menu.cpp)
+target_link_libraries(main PRIVATE sfml-graphics )
+target_compile_features(main PRIVATE cxx_std_17)
+
 if(MSVC)
-		target_compile_options(Main PRIVATE /std:c++17 /MP)
-        target_link_options(Main PUBLIC /ignore:4099)
+		target_compile_options(main PRIVATE /std:c++17 /MP)
+        target_link_options(main PUBLIC /ignore:4099)
 endif(MSVC)
 
 if(WIN32)
-    set_target_properties(Main PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
-    set_target_properties(Main PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Debug")
+    set_target_properties(main PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
+    set_target_properties(main PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Debug")
 elseif(UNIX AND NOT APPLE)
-    set_target_properties(Main PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
+    set_target_properties(main PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
 elseif(APPLE)
-    set_target_properties(Main PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
-    set_target_properties(Main PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/bin/")
-    set_target_properties(Main PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/bin/")
+    set_target_properties(main PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
+    set_target_properties(main PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/bin/")
+    set_target_properties(main PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/bin/")
 endif(WIN32)
 
 file(GLOB SHADERS
@@ -93,43 +106,32 @@ file(GLOB SHADERS
              "Resources/Shaders/*.tes"
              "Resources/Shaders/*.gs"
              "Resources/Shaders/*.cs"
-    )
+             "Resources/Fonts/halloween-party-st-font/*.ttf"	
+)
 
 # copy dlls
 	file(GLOB DLLS "dlls/*.dll")
     foreach(SHADER ${SHADERS})
         if(WIN32)
             # configure_file(${SHADER} "test")
-            add_custom_command(TARGET Main PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SHADER} $<TARGET_FILE_DIR:Main>)
-			add_custom_command(TARGET Main PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLLS} $<TARGET_FILE_DIR:Main>)
+            add_custom_command(TARGET main PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SHADER} $<TARGET_FILE_DIR:main>)
+			add_custom_command(TARGET main PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLLS} $<TARGET_FILE_DIR:main>)
         elseif(UNIX AND NOT APPLE)
             file(COPY ${SHADER} DESTINATION ${CMAKE_SOURCE_DIR}/bin)
         elseif(APPLE)
             # create symbolic link for *.vs *.fs *.gs
             get_filename_component(SHADERNAME ${SHADER} NAME)
-            makeLink(${SHADER} ${CMAKE_SOURCE_DIR}/bin/${chapter}/${SHADERNAME} Main)
+            makeLink(${SHADER} ${CMAKE_SOURCE_DIR}/bin/${chapter}/${SHADERNAME} main)
         endif(WIN32)
     endforeach(SHADER)
 
 
-#Menu
-#[[include(FetchContent)
-FetchContent_Declare(SFML
-    GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 2.6.x)
-FetchContent_MakeAvailable(SFML)]]
-
-#[[Prueba Menu]]
-#add_executable(main src/menuTest.cpp src/Menu.cpp)
-#target_link_libraries(main PRIVATE sfml-graphics )
-#target_compile_features(main PRIVATE cxx_std_17)
-
-#if(WIN32)
-#    add_custom_command(
-#        TARGET main
-#        COMMENT "Copy OpenAL DLL"
-#        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:main>
-#        VERBATIM)
-#endif()
+if(WIN32)
+    add_custom_command(
+        TARGET main
+        COMMENT "Copy OpenAL DLL"
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:main>
+        VERBATIM)
+endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/includes)
