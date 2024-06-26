@@ -78,8 +78,8 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 #[[Prueba Menu]]
-add_executable(main src/menuTest.cpp src/Menu.cpp)
-target_link_libraries(main PRIVATE sfml-graphics )
+add_executable(main src/ModelsMain.cpp)
+target_link_libraries(main PRIVATE sfml-graphics ${LIBS})
 target_compile_features(main PRIVATE cxx_std_17)
 
 if(MSVC)

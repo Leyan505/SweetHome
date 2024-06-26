@@ -1,5 +1,6 @@
 #include "glad.h"
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
+#include <SFML/Window.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -13,16 +14,19 @@
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow* window, const Model& modelo, int mode, glm::vec3 position , glm::vec3 scale);
+void mouse_callback(sf::Window &window, sf::Event event);
+//void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 position , glm::vec3 scale);
 //funciones
 bool CheckCollision(const Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
 void resolveCollision(Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
 
 // settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+// settings
+sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+const unsigned int SCR_WIDTH = desktopMode.width;
+const unsigned int SCR_HEIGHT = desktopMode.height;
+
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 5.90f));
@@ -36,37 +40,31 @@ float lastFrame = 0.0f;
 
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
+    // create a window
+    sf::Window window( desktopMode, "SweetHome", sf::Style::Default, sf::ContextSettings(24));
+    window.setFramerateLimit(60);
+    window.setActive(true);
+    window.setMouseCursorGrabbed(true);
+    window.setMouseCursorVisible(false);
 
-    // glfw window creation
-    // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-    if (window == NULL)
+    /*if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
-    }
-    glfwMakeContextCurrent(window);
+    }*/
+    /*glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
     // tell GLFW to capture our mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);*/
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if (!gladLoadGLLoader((GLADloadproc)sf::Context::getFunction))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
@@ -91,23 +89,25 @@ int main()
 
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
+    sf::Clock clock;
 
+
+    bool running = true;
     // render loop
     // -----------
-    while (!glfwWindowShouldClose(window))
+    while (window.isOpen())
     {
         // per-frame time logic
         // --------------------
-        float currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-
-        
+        //float currentFrame = static_cast<float>(glfwGetTime());
+         float currentFrame = static_cast<float>(clock.getElapsedTime().asSeconds());
+         deltaTime = currentFrame - lastFrame;
+         lastFrame = currentFrame;
 
         // render
         // ------
-        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
         glm::vec3 maePos = glm::vec3(0.0f, -1.5f, 0.0f);
         glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 1.0f);
 
@@ -118,9 +118,11 @@ int main()
         else{
             // input
             // -----
-            processInput(window, corridor, 0, glm::vec3(0.0f), glm::vec3(1.0f));
+                processInput(window, corridor, 0, glm::vec3(0.0f), glm::vec3(1.0f));
             }
-
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
         // don't forget to enable shader before setting uniforms
         ourShader.use();
 
@@ -137,7 +139,6 @@ int main()
         ourShader.setMat4("model", model);
         mae.Draw(ourShader);
         
-
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
@@ -147,23 +148,48 @@ int main()
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+        /*glfwSwapBuffers(window);
+        glfwPollEvents();*/
+        window.display();
 
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+            {
+                running = false;
+                window.close();
+            }
+            if (event.type == sf::Event::MouseMoved) {
+                sf::Vector2i center(window.getSize().x / 2, window.getSize().y / 2);
+
+                float xoffset = sf::Mouse::getPosition(window).x - (float)center.x;
+                float yoffset = (float)center.y - sf::Mouse::getPosition(window).y;
+
+                camera.ProcessMouseMovement(xoffset, yoffset);
+
+                sf::Mouse::setPosition(sf::Vector2<int>((int)window.getSize().x / 2, (int)window.getSize().y / 2), window);
+                //mouse_callback(window, event);
+            }
+            if (event.type == sf::Event::Resized)
+            {
+                // adjust the viewport when the window is resized
+                glViewport(0, 0, event.size.width, event.size.height);
+            }
+        }
+    }
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
-    glfwTerminate();
+    //glfwTerminate();
     return 0;
 }
 
 //esto va en el main
-void processInput(GLFWwindow* window, const Model& modelo, int mode, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
+void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
     camera.Position.y = 0.0f;
     if (mode == 1)
     {
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         glm::vec3 front = camera.Front;
         glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
         if (!CheckCollision(newPos, modelo, position, scale))
@@ -171,21 +197,21 @@ void processInput(GLFWwindow* window, const Model& modelo, int mode, glm::vec3 p
         else resolveCollision(camera, modelo, position, scale);
         
         }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
                 camera.Position = newPos;
             else resolveCollision(camera, modelo, position, scale);
         }
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
                 camera.Position = newPos;
             else resolveCollision(camera, modelo, position, scale);
         }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        if  (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
@@ -195,28 +221,28 @@ void processInput(GLFWwindow* window, const Model& modelo, int mode, glm::vec3 p
     }
     else
     {
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
                 camera.Position = newPos;
             else resolveCollision(camera, modelo, position, scale);
         }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
                 camera.Position = newPos;
             else resolveCollision(camera, modelo, position, scale);
         }
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
                 camera.Position = newPos;
             else resolveCollision(camera, modelo, position, scale);
         }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
@@ -225,8 +251,8 @@ void processInput(GLFWwindow* window, const Model& modelo, int mode, glm::vec3 p
         }
     }
 
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
+        window.close();
 }
 
 
@@ -239,12 +265,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+void mouse_callback(sf::Window &window, sf::Event event)
 {
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
+    float xpos = event.mouseMove.x;
+    float ypos = event.mouseMove.y;
 
     if (firstMouse)
     {
@@ -264,10 +288,10 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+/*void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
-}
+}*/
 
 //funciones
  bool CheckCollision(const Camera & camera, const Model & model, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) {
