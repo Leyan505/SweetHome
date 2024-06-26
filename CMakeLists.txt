@@ -66,9 +66,9 @@ add_library(GLAD "src/glad.c")
 set(LIBS ${LIBS} GLAD)
 
 #[[ Prueba Modelos]]
-add_executable(main src/ModelsMain.cpp)
-target_link_libraries(main PRIVATE ${LIBS})
-target_compile_features(main PRIVATE cxx_std_17)
+# add_executable(main src/ModelsMain.cpp)
+# target_link_libraries(main PRIVATE ${LIBS})
+# target_compile_features(main PRIVATE cxx_std_17)
 
 #Menu
 include(FetchContent)
@@ -78,9 +78,9 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 #[[Prueba Menu]]
-# add_executable(main src/menuTest.cpp src/Menu.cpp)
-# target_link_libraries(main PRIVATE sfml-graphics )
-# target_compile_features(main PRIVATE cxx_std_17)
+add_executable(main src/menuTest.cpp src/Menu.cpp)
+target_link_libraries(main PRIVATE sfml-graphics )
+target_compile_features(main PRIVATE cxx_std_17)
 
 if(MSVC)
 		target_compile_options(main PRIVATE /std:c++17 /MP)
