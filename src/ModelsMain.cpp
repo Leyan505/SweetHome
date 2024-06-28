@@ -1,10 +1,12 @@
 #include "glad.h"
 //#include <GLFW/glfw3.h>
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "glm/ext.hpp"
 
 #include <filesystem.h>
 #include <Headers/shader_m.h>
@@ -13,23 +15,19 @@
 
 #include <iostream>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(sf::Window &window, sf::Event event);
+
 //void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 position , glm::vec3 scale);
-//funciones
+void processInput(sf::Window &window, const Model& modelo, int mode, sf::Sound &stepSound, glm::vec3 position , glm::vec3 scale);
 bool CheckCollision(const Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
 void resolveCollision(Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
 
-// settings
 // settings
 sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
 const unsigned int SCR_WIDTH = desktopMode.width;
 const unsigned int SCR_HEIGHT = desktopMode.height;
 
-
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 5.90f));
+Camera camera(glm::vec3(0.0f, 0.0f, -16.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -40,27 +38,12 @@ float lastFrame = 0.0f;
 
 int main()
 {
-
-    // create a window
+   // create a window
     sf::Window window( desktopMode, "SweetHome", sf::Style::Default, sf::ContextSettings(24));
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(165);
     window.setActive(true);
     window.setMouseCursorGrabbed(true);
     window.setMouseCursorVisible(false);
-
-    /*if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }*/
-    /*glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
-
-    // tell GLFW to capture our mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);*/
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -84,13 +67,51 @@ int main()
     // load models
     // -----------
     //Model exterior(FileSystem::getPath("Resources/Objects/coralineMonsterHouse/coralineMonsterHouse.gltf"));
-    Model corridor(FileSystem::getPath("Resources/Objects/delusional/delusionalHallway.gltf"));
-    Model mae(FileSystem::getPath("Resources/Objects/table/table.gltf"));
+    Model corridor(FileSystem::getPath("resources/objects/delusional/delusional.gltf"));
+    //Model mae(FileSystem::getPath("Resources/Objects/circoCoraline/circo.gltf"));
 
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
+     // build and compile our shader zprogram
+    // ------------------------------------
+    Shader lightingShader("lighting.vs", "lighting.fs");
+    Shader lightCubeShader("light_cube.vs", "light_cube.fs");
+
+
+    // positions of the point lights
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3( 0.85f,  0.74f,  -7.93f),
+        glm::vec3( -1.09f, 0.74f, -4.70f),
+        glm::vec3(0.85f,  0.74f, -0.25f),
+        glm::vec3( -1.09f,  0.74f, 4.16f),
+        glm::vec3( 0.85f,  0.74f, 8.80f),
+        glm::vec3( -0.09f,  0.74f, -16.98f),
+        glm::vec3( -0.09f,  0.0f, 18.63f)
+    };
+
+
+    // shader configuration
+    // --------------------
+    lightingShader.use();
+    lightingShader.setInt("material.diffuse", 0);
+    lightingShader.setInt("material.specular", 1);
+
     sf::Clock clock;
+
+    sf::Music music;
+    if(!music.openFromFile(FileSystem::getPath("resources/audio/explorationCoraline.mp3")))
+        return 1;
+    music.setVolume(25.0f);
+    music.setLoop(true);
+    music.play();
+
+    sf::SoundBuffer buffer;
+    if(!buffer.loadFromFile(FileSystem::getPath("resources/audio/step.mp3")))
+        return -1;
+    sf::Sound stepSound;
+    stepSound.setBuffer(buffer);
+    stepSound.setVolume(25.0f);
 
 
     bool running = true;
@@ -111,39 +132,90 @@ int main()
         glm::vec3 maePos = glm::vec3(0.0f, -1.5f, 0.0f);
         glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 1.0f);
 
-        if (CheckCollision(camera, mae, maePos, maeScale)) {
+       /*if (CheckCollision(camera, mae, maePos, maeScale)) {
             processInput(window, mae, 1, maePos, maeScale);
             std::cout << "¡Colision detectada!" << std::endl;
-        }
-        else{
+        }*/
+        //else{
             // input
             // -----
-                processInput(window, corridor, 0, glm::vec3(0.0f), glm::vec3(1.0f));
-            }
+                processInput(window, corridor, 0, stepSound, glm::vec3(0.0f), glm::vec3(1.0f));
+            //}
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        // don't forget to enable shader before setting uniforms
-        ourShader.use();
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader.use();
+        lightingShader.setVec3("viewPos", camera.Position);
+        lightingShader.setFloat("material.shininess", 32.0f);
+
+        // directional light
+        lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        lightingShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+        lightingShader.setVec3("dirLight.diffuse", 0.04f, 0.04f, 0.04f);
+        lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+        for (int i = 0; i < (sizeof(pointLightPositions)/sizeof(glm::vec3))-1; i++)
+        {
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].position", pointLightPositions[i]);
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].ambient", 0.02f, 0.03f, 0.05f);
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].diffuse", 0.3f, 0.3f, 0.5f);
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].specular", 1.0f, 1.0f, 1.0f);
+            lightingShader.setFloat("pointLights["+ std::to_string(i) +"].constant", 1.0f);
+            lightingShader.setFloat("pointLights["+ std::to_string(i) +"].linear", 0.14f);
+            lightingShader.setFloat("pointLights["+ std::to_string(i) +"].quadratic", 0.07f);
+        }
+        
+        lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].position", pointLightPositions[sizeof(pointLightPositions)/sizeof(glm::vec3)-1]);
+        lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].ambient", 0.02f, 0.03f, 0.9f);
+        lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].diffuse", 0.3f, 0.3f, 0.5f);
+        lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setFloat("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].constant", 1.0f);
+        lightingShader.setFloat("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].linear", 0.14f);
+        lightingShader.setFloat("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].quadratic", 0.07f);
+
+        // spotLight
+        lightingShader.setVec3("spotLight.position", camera.Position);
+        lightingShader.setVec3("spotLight.direction", camera.Front);
+        lightingShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+        lightingShader.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setFloat("spotLight.constant", 1.0f);
+        lightingShader.setFloat("spotLight.linear", 0.09f);
+        lightingShader.setFloat("spotLight.quadratic", 0.032f);
+        lightingShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+        lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));     
 
         // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 200000.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        ourShader.setMat4("projection", projection);
-        ourShader.setMat4("view", view);
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setMat4("view", view);
+
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        lightingShader.setMat4("model", model);
+
+        // don't forget to enable shader before setting uniforms
+        lightingShader.use();
+
+        // view/projection transformations
+        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        view = camera.GetViewMatrix();
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setMat4("view", view);
 
         // render the loaded model
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
+        model = glm::mat4(1.0f);
+        /*model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
-        mae.Draw(ourShader);
+        mae.Draw(ourShader);*/
         
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        corridor.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        corridor.Draw(lightingShader);
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -168,7 +240,6 @@ int main()
                 camera.ProcessMouseMovement(xoffset, yoffset);
 
                 sf::Mouse::setPosition(sf::Vector2<int>((int)window.getSize().x / 2, (int)window.getSize().y / 2), window);
-                //mouse_callback(window, event);
             }
             if (event.type == sf::Event::Resized)
             {
@@ -177,23 +248,26 @@ int main()
             }
         }
     }
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
-    //glfwTerminate();
+
     return 0;
 }
 
-//esto va en el main
-void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
+void processInput(sf::Window &window, const Model& modelo, int mode, sf::Sound &stepSound, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
     camera.Position.y = 0.0f;
+    std::cout << glm::to_string(camera.Position) << std::endl;
     if (mode == 1)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         glm::vec3 front = camera.Front;
         glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
         if (!CheckCollision(newPos, modelo, position, scale))
+        {
             camera.Position = newPos;
+            stepSound.pause();
+            stepSound.play();
+
+        }
         else resolveCollision(camera, modelo, position, scale);
         
         }
@@ -201,21 +275,33 @@ void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 p
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
+            {
                 camera.Position = newPos;
+                stepSound.pause();
+                stepSound.play();
+            }
             else resolveCollision(camera, modelo, position, scale);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
+            {
                 camera.Position = newPos;
+                stepSound.pause();
+                stepSound.play();
+            }
             else resolveCollision(camera, modelo, position, scale);
         }
         if  (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
+            {
                 camera.Position = newPos;
+                stepSound.pause();
+                stepSound.play();
+            }
             else resolveCollision(camera, modelo, position, scale);
         }
     }
@@ -225,28 +311,44 @@ void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 p
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
+            {
                 camera.Position = newPos;
+                stepSound.pause();
+                stepSound.play();
+            }
             else resolveCollision(camera, modelo, position, scale);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
+            {
                 camera.Position = newPos;
+                stepSound.pause();
+                stepSound.play();
+            }
             else resolveCollision(camera, modelo, position, scale);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
+            {
                 camera.Position = newPos;
+                stepSound.pause();
+                stepSound.play();
+            }
             else resolveCollision(camera, modelo, position, scale);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
+            {
                 camera.Position = newPos;
+                stepSound.pause();
+                stepSound.play();
+            }
             else resolveCollision(camera, modelo, position, scale);
         }
     }
@@ -255,36 +357,6 @@ void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 p
         window.close();
 }
 
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
-}
-
-void mouse_callback(sf::Window &window, sf::Event event)
-{
-    float xpos = event.mouseMove.x;
-    float ypos = event.mouseMove.y;
-
-    if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
-}
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
