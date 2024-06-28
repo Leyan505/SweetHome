@@ -79,7 +79,7 @@ FetchContent_MakeAvailable(SFML)
 
 #[[Prueba Menu]]
 add_executable(main src/ModelsMain.cpp)
-target_link_libraries(main PRIVATE sfml-graphics ${LIBS})
+target_link_libraries(main PRIVATE sfml-graphics sfml-audio ${LIBS})
 target_compile_features(main PRIVATE cxx_std_17)
 
 if(MSVC)
@@ -99,14 +99,16 @@ elseif(APPLE)
 endif(WIN32)
 
 file(GLOB SHADERS
-             "Resources/Shaders/*.vs"
+             "resources/shaders/*.vs"
              # "Resources/Shaders/*.frag"
-             "Resources/Shaders/*.fs"
-             "Resources/Shaders/*.tcs"
-             "Resources/Shaders/*.tes"
-             "Resources/Shaders/*.gs"
-             "Resources/Shaders/*.cs"
-             "Resources/Fonts/halloween-party-st-font/*.ttf"	
+             "resources/shaders/*.fs"
+             "resources/shaders/*.tcs"
+             "resources/shaders/*.tes"
+             "resources/shaders/*.gs"
+             "resources/shaders/*.cs"
+             "resources/shaders/*/*.vs"
+             "resources/shaders/*/*.fs"
+             "resources/fonts/halloween-party-st-font/*.ttf"	
 )
 
 # copy dlls
