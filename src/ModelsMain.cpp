@@ -83,8 +83,8 @@ int main()
     // load models
     // -----------
     // Model exterior(FileSystem::getPath("Resources/Objects/coralineMonsterHouse/coralineMonsterHouse.gltf"));
-    Model kitchen(FileSystem::getPath("Resources/Objects/kitchen2/coraline.gltf"));
-    Model fridge(FileSystem::getPath("Resources/Objects/fridge/cora2.gltf"));
+    Model kitchen(FileSystem::getPath("Resources/Objects/coraline3/coraline.gltf"));
+   // Model fridge(FileSystem::getPath("Resources/Objects/fridge/cora2.gltf"));
     // draw in wireframe
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -108,18 +108,18 @@ int main()
         // glm::vec3 maePos = glm::vec3(0.0f, -1.5f, 0.0f);
         // glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 1.0f);
 
-        if (CheckCollision(camera, fridge, glm::vec3(0.0f), glm::vec3(1.0f)))
-        {
-            processInput(window, fridge, 1, glm::vec3(0.0f), glm::vec3(1.0f));
-            std::cout << "¡Colision detectada!" << std::endl;
-        }
-        else
-        {
-            // input
-            // -----
-            processInput(window, kitchen, 0, glm::vec3(0.0f), glm::vec3(1.0f));
-        }
+        // if (CheckCollision(camera, fridge, glm::vec3(0.0f), glm::vec3(1.0f)))
+        // {
+        //     processInput(window, fridge, 1, glm::vec3(0.0f), glm::vec3(1.0f));
+        //     std::cout << "¡Colision detectada!" << std::endl;
+        // }
+        // else
+        // {
+        //     // input
+        //     // -----
+        // }
 
+            processInput(window, kitchen, 0, glm::vec3(0.0f, 0.0f, 0.f), glm::vec3(1.0f, 1.0f, 1.0f));
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -146,12 +146,11 @@ int main()
         ourShader.setMat4("model", model);
         kitchen.Draw(ourShader);
 
-        model = glm::mat4(1.0f);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        fridge.Draw(ourShader);
+        // model = glm::mat4(1.0f);
+        // model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        // model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
+        // ourShader.setMat4("model", model);
+        // fridge.Draw(ourShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -195,47 +194,43 @@ int main()
 // esto va en el main
 void processInput(sf::Window &window, const Model &modelo, int mode, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
-    //camera.Position.y = 0.0f;
+    camera.Position.y = 0.0f;
     if (mode == 1)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
-            camera.Position = newPos;
-            // if (!CheckCollision(newPos, modelo, position, scale))
-            // else
-            //     resolveCollision(camera, modelo, position, scale);
+            if (!CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+         
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
-            camera.Position = newPos;
-            // if (!CheckCollision(newPos, modelo, position, scale))
-            // else
-            //     resolveCollision(camera, modelo, position, scale);
-            //     
+            if (!CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+    
+                
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
-            camera.Position = newPos;
-            // if (!CheckCollision(newPos, modelo, position, scale))
-            //     camera.Position = newPos;
-            // else
-            //     resolveCollision(camera, modelo, position, scale);
+            
+            if (!CheckCollision(newPos, modelo, position, scale))
+                 camera.Position = newPos;
+         
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
-            camera.Position = newPos;
-            // if (!CheckCollision(newPos, modelo, position, scale))
-            //     camera.Position = newPos;
-            // else
-            //     resolveCollision(camera, modelo, position, scale);
+            
+            if (!CheckCollision(newPos, modelo, position, scale))
+                 camera.Position = newPos;
+   
         }
     }
     else
@@ -244,41 +239,37 @@ void processInput(sf::Window &window, const Model &modelo, int mode, glm::vec3 p
         {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
-            camera.Position = newPos;
-            // if (CheckCollision(newPos, modelo, position, scale))
-            //     camera.Position = newPos;
-            // else
-            //     resolveCollision(camera, modelo, position, scale);
+            
+             if (CheckCollision(newPos, modelo, position, scale))
+                 camera.Position = newPos;
+            
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
-            camera.Position = newPos;
-            // if (CheckCollision(newPos, modelo, position, scale))
-            //     camera.Position = newPos;
-            // else
-            //     resolveCollision(camera, modelo, position, scale);
+            
+             if (CheckCollision(newPos, modelo, position, scale))
+                 camera.Position = newPos;
+   
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
-            camera.Position = newPos;
-            // if (CheckCollision(newPos, modelo, position, scale))
-            //     camera.Position = newPos;
-            // else
-            //     resolveCollision(camera, modelo, position, scale);
+            
+             if (CheckCollision(newPos, modelo, position, scale))
+                 camera.Position = newPos;
+          
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
-            camera.Position = newPos;
-            // if (CheckCollision(newPos, modelo, position, scale))
-            //     camera.Position = newPos;
-            // else
-            //     resolveCollision(camera, modelo, position, scale);
+            
+             if (CheckCollision(newPos, modelo, position, scale))
+                camera.Position = newPos;
+          
         }
     }
 
