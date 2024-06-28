@@ -84,8 +84,7 @@ int main()
     // load models
     // -----------
     //Model exterior(FileSystem::getPath("Resources/Objects/coralineMonsterHouse/coralineMonsterHouse.gltf"));
-    Model corridor(FileSystem::getPath("Resources/Objects/delusional/delusionalHallway.gltf"));
-    Model mae(FileSystem::getPath("Resources/Objects/table/table.gltf"));
+    Model kitchen(FileSystem::getPath("Resources/Objects/kitchen2/coraline.gltf"));
 
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -111,15 +110,16 @@ int main()
         glm::vec3 maePos = glm::vec3(0.0f, -1.5f, 0.0f);
         glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 1.0f);
 
-        if (CheckCollision(camera, mae, maePos, maeScale)) {
-            processInput(window, mae, 1, maePos, maeScale);
-            std::cout << "¡Colision detectada!" << std::endl;
-        }
-        else{
-            // input
-            // -----
-                processInput(window, corridor, 0, glm::vec3(0.0f), glm::vec3(1.0f));
-            }
+        // if (CheckCollision(camera, mae, maePos, maeScale)) {
+        //     processInput(window, mae, 1, maePos, maeScale);
+        //     std::cout << "¡Colision detectada!" << std::endl;
+        // }
+        // else{
+        //     // input
+        //     // -----
+        //     }
+        //         
+        processInput(window, kitchen, 0, glm::vec3(0.0f), glm::vec3(1.0f));
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
@@ -133,17 +133,18 @@ int main()
         ourShader.setMat4("view", view);
 
         // render the loaded model
+        // glm::mat4 model = glm::mat4(1.0f);
+        // model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
+        // model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        // ourShader.setMat4("model", model);
+        // mae.Draw(ourShader);
+
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        mae.Draw(ourShader);
-        
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
-        corridor.Draw(ourShader);
+        kitchen.Draw(ourShader);
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
