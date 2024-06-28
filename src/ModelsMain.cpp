@@ -1,5 +1,5 @@
 #include "glad.h"
-//#include <GLFW/glfw3.h>
+// #include <GLFW/glfw3.h>
 #include <SFML/Window.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -13,20 +13,19 @@
 
 #include <iostream>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(sf::Window &window, sf::Event event);
-//void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 position , glm::vec3 scale);
-//funciones
-bool CheckCollision(const Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
-void resolveCollision(Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
+// void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void processInput(sf::Window &window, const Model &modelo, int mode, glm::vec3 position, glm::vec3 scale);
+// funciones
+bool CheckCollision(const Camera &camera, const Model &model, glm::vec3 position, glm::vec3 scale);
+void resolveCollision(Camera &camera, const Model &model, glm::vec3 position, glm::vec3 scale);
 
 // settings
 // settings
 sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
 const unsigned int SCR_WIDTH = desktopMode.width;
 const unsigned int SCR_HEIGHT = desktopMode.height;
-
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 5.90f));
@@ -42,7 +41,7 @@ int main()
 {
 
     // create a window
-    sf::Window window( desktopMode, "SweetHome", sf::Style::Default, sf::ContextSettings(24));
+    sf::Window window(desktopMode, "SweetHome", sf::Style::Default, sf::ContextSettings(24));
     window.setFramerateLimit(60);
     window.setActive(true);
     window.setMouseCursorGrabbed(true);
@@ -83,14 +82,13 @@ int main()
 
     // load models
     // -----------
-    //Model exterior(FileSystem::getPath("Resources/Objects/coralineMonsterHouse/coralineMonsterHouse.gltf"));
+    // Model exterior(FileSystem::getPath("Resources/Objects/coralineMonsterHouse/coralineMonsterHouse.gltf"));
     Model kitchen(FileSystem::getPath("Resources/Objects/kitchen2/coraline.gltf"));
-
+    Model fridge(FileSystem::getPath("Resources/Objects/fridge/cora2.gltf"));
     // draw in wireframe
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    
-    sf::Clock clock;
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    sf::Clock clock;
 
     bool running = true;
     // render loop
@@ -99,30 +97,32 @@ int main()
     {
         // per-frame time logic
         // --------------------
-        //float currentFrame = static_cast<float>(glfwGetTime());
-         float currentFrame = static_cast<float>(clock.getElapsedTime().asSeconds());
-         deltaTime = currentFrame - lastFrame;
-         lastFrame = currentFrame;
+        // float currentFrame = static_cast<float>(glfwGetTime());
+        float currentFrame = static_cast<float>(clock.getElapsedTime().asSeconds());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
 
         // render
         // ------
-        
-        glm::vec3 maePos = glm::vec3(0.0f, -1.5f, 0.0f);
-        glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 1.0f);
 
-        // if (CheckCollision(camera, mae, maePos, maeScale)) {
-        //     processInput(window, mae, 1, maePos, maeScale);
-        //     std::cout << "¡Colision detectada!" << std::endl;
-        // }
-        // else{
-        //     // input
-        //     // -----
-        //     }
-        //         
-        processInput(window, kitchen, 0, glm::vec3(0.0f), glm::vec3(1.0f));
+        // glm::vec3 maePos = glm::vec3(0.0f, -1.5f, 0.0f);
+        // glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 1.0f);
+
+        if (CheckCollision(camera, fridge, glm::vec3(0.0f), glm::vec3(1.0f)))
+        {
+            processInput(window, fridge, 1, glm::vec3(0.0f), glm::vec3(1.0f));
+            std::cout << "¡Colision detectada!" << std::endl;
+        }
+        else
+        {
+            // input
+            // -----
+            processInput(window, kitchen, 0, glm::vec3(0.0f), glm::vec3(1.0f));
+        }
+
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
         // don't forget to enable shader before setting uniforms
         ourShader.use();
 
@@ -142,10 +142,16 @@ int main()
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
         kitchen.Draw(ourShader);
 
+        model = glm::mat4(1.0f);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        fridge.Draw(ourShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -154,13 +160,15 @@ int main()
         window.display();
 
         sf::Event event;
-        while (window.pollEvent(event)) {
+        while (window.pollEvent(event))
+        {
             if (event.type == sf::Event::Closed)
             {
                 running = false;
                 window.close();
             }
-            if (event.type == sf::Event::MouseMoved) {
+            if (event.type == sf::Event::MouseMoved)
+            {
                 sf::Vector2i center(window.getSize().x / 2, window.getSize().y / 2);
 
                 float xoffset = sf::Mouse::getPosition(window).x - (float)center.x;
@@ -169,7 +177,7 @@ int main()
                 camera.ProcessMouseMovement(xoffset, yoffset);
 
                 sf::Mouse::setPosition(sf::Vector2<int>((int)window.getSize().x / 2, (int)window.getSize().y / 2), window);
-                //mouse_callback(window, event);
+                // mouse_callback(window, event);
             }
             if (event.type == sf::Event::Resized)
             {
@@ -180,75 +188,97 @@ int main()
     }
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
-    //glfwTerminate();
+    // glfwTerminate();
     return 0;
 }
 
-//esto va en el main
-void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
+// esto va en el main
+void processInput(sf::Window &window, const Model &modelo, int mode, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
-    camera.Position.y = 0.0f;
+    //camera.Position.y = 0.0f;
     if (mode == 1)
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        glm::vec3 front = camera.Front;
-        glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
-        if (!CheckCollision(newPos, modelo, position, scale))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {
+            glm::vec3 front = camera.Front;
+            glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
             camera.Position = newPos;
-        else resolveCollision(camera, modelo, position, scale);
-        
+            // if (!CheckCollision(newPos, modelo, position, scale))
+            // else
+            //     resolveCollision(camera, modelo, position, scale);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
-            if (!CheckCollision(newPos, modelo, position, scale))
-                camera.Position = newPos;
-            else resolveCollision(camera, modelo, position, scale);
+            camera.Position = newPos;
+            // if (!CheckCollision(newPos, modelo, position, scale))
+            // else
+            //     resolveCollision(camera, modelo, position, scale);
+            //     
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
-            if (!CheckCollision(newPos, modelo, position, scale))
-                camera.Position = newPos;
-            else resolveCollision(camera, modelo, position, scale);
+            camera.Position = newPos;
+            // if (!CheckCollision(newPos, modelo, position, scale))
+            //     camera.Position = newPos;
+            // else
+            //     resolveCollision(camera, modelo, position, scale);
         }
-        if  (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
-            if (!CheckCollision(newPos, modelo, position, scale))
-                camera.Position = newPos;
-            else resolveCollision(camera, modelo, position, scale);
+            camera.Position = newPos;
+            // if (!CheckCollision(newPos, modelo, position, scale))
+            //     camera.Position = newPos;
+            // else
+            //     resolveCollision(camera, modelo, position, scale);
         }
     }
     else
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
-            if (CheckCollision(newPos, modelo, position, scale))
-                camera.Position = newPos;
-            else resolveCollision(camera, modelo, position, scale);
+            camera.Position = newPos;
+            // if (CheckCollision(newPos, modelo, position, scale))
+            //     camera.Position = newPos;
+            // else
+            //     resolveCollision(camera, modelo, position, scale);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
-            if (CheckCollision(newPos, modelo, position, scale))
-                camera.Position = newPos;
-            else resolveCollision(camera, modelo, position, scale);
+            camera.Position = newPos;
+            // if (CheckCollision(newPos, modelo, position, scale))
+            //     camera.Position = newPos;
+            // else
+            //     resolveCollision(camera, modelo, position, scale);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
-            if (CheckCollision(newPos, modelo, position, scale))
-                camera.Position = newPos;
-            else resolveCollision(camera, modelo, position, scale);
+            camera.Position = newPos;
+            // if (CheckCollision(newPos, modelo, position, scale))
+            //     camera.Position = newPos;
+            // else
+            //     resolveCollision(camera, modelo, position, scale);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
-            if (CheckCollision(newPos, modelo, position, scale))
-                camera.Position = newPos;
-            else resolveCollision(camera, modelo, position, scale);
+            camera.Position = newPos;
+            // if (CheckCollision(newPos, modelo, position, scale))
+            //     camera.Position = newPos;
+            // else
+            //     resolveCollision(camera, modelo, position, scale);
         }
     }
 
@@ -256,12 +286,11 @@ void processInput(sf::Window &window, const Model& modelo, int mode, glm::vec3 p
         window.close();
 }
 
-
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and 
+    // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
@@ -294,61 +323,60 @@ void mouse_callback(sf::Window &window, sf::Event event)
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }*/
 
-//funciones
- bool CheckCollision(const Camera & camera, const Model & model, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) {
-     // Obtenemos la posición de la cámara
-     glm::vec3 cameraPos = camera.Position;
+// funciones
+bool CheckCollision(const Camera &camera, const Model &model, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
+{
+    // Obtenemos la posición de la cámara
+    glm::vec3 cameraPos = camera.Position;
 
-     // Iteramos sobre las mallas del modelo
-     for (const auto& mesh : model.meshes) 
-     {  
-         // Obtenemos la posición y dimensiones de la caja de colisión de la malla
-         glm::vec3 minBox = mesh.boundingBox.min;
-         glm::vec3 maxBox = mesh.boundingBox.max;
-
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, position); // translate it down so it's at the center of the scene
-        model = glm::scale(model, scale);	// it's a bit too big for our scene, so scale it down
-        minBox = model * glm::vec4(minBox,1.0f);
-        maxBox = model * glm::vec4(maxBox, 1.0f);
-
-        if(position == glm::vec3(0.0f))
-        {
-            minBox = minBox+0.1f;
-            maxBox = maxBox-0.1f;
-        }
-
-
-         // Comprobamos si la posición de la cámara está dentro de la caja de colisión
-         if (cameraPos.x >= minBox.x && cameraPos.x <= maxBox.x &&
-             cameraPos.y >= minBox.y && cameraPos.y <= maxBox.y &&
-             cameraPos.z >= minBox.z && cameraPos.z <= maxBox.z) 
-         {
-             // Si la posición de la cámara está dentro de la caja de colisión, hay colisión
-             return true;
-         }
-
-     }
-
-     // Si ninguna malla tiene colisión con la cámara, retornamos false
-     return false;
- }
-
- void resolveCollision(Camera & camera, const Model & model, glm::vec3 position, glm::vec3 scale = glm::vec3(1.0f)) {
-
-     // Iteramos sobre las mallas del modelo
-     for (const auto& mesh : model.meshes) 
-     {
+    // Iteramos sobre las mallas del modelo
+    for (const auto &mesh : model.meshes)
+    {
+        // Obtenemos la posición y dimensiones de la caja de colisión de la malla
         glm::vec3 minBox = mesh.boundingBox.min;
         glm::vec3 maxBox = mesh.boundingBox.max;
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, position); // translate it down so it's at the center of the scene
-        model = glm::scale(model, scale);	// it's a bit too big for our scene, so scale it down
-        minBox = model * glm::vec4(minBox,1.0f);
+        model = glm::scale(model, scale);        // it's a bit too big for our scene, so scale it down
+        minBox = model * glm::vec4(minBox, 1.0f);
         maxBox = model * glm::vec4(maxBox, 1.0f);
 
-        
+        if (position == glm::vec3(0.0f))
+        {
+            minBox = minBox + 0.1f;
+            maxBox = maxBox - 0.1f;
+        }
+
+        // Comprobamos si la posición de la cámara está dentro de la caja de colisión
+        if (cameraPos.x >= minBox.x && cameraPos.x <= maxBox.x &&
+            cameraPos.y >= minBox.y && cameraPos.y <= maxBox.y &&
+            cameraPos.z >= minBox.z && cameraPos.z <= maxBox.z)
+        {
+            // Si la posición de la cámara está dentro de la caja de colisión, hay colisión
+            return true;
+        }
+    }
+
+    // Si ninguna malla tiene colisión con la cámara, retornamos false
+    return false;
+}
+
+void resolveCollision(Camera &camera, const Model &model, glm::vec3 position, glm::vec3 scale = glm::vec3(1.0f))
+{
+
+    // Iteramos sobre las mallas del modelo
+    for (const auto &mesh : model.meshes)
+    {
+        glm::vec3 minBox = mesh.boundingBox.min;
+        glm::vec3 maxBox = mesh.boundingBox.max;
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, position); // translate it down so it's at the center of the scene
+        model = glm::scale(model, scale);        // it's a bit too big for our scene, so scale it down
+        minBox = model * glm::vec4(minBox, 1.0f);
+        maxBox = model * glm::vec4(maxBox, 1.0f);
+
         // Resolvemos la colisión ajustando ligeramente la dirección del movimiento
         // Encuentra el vector desde la cámara hasta el punto medio de la caja de colisión
         glm::vec3 collisionVector = (minBox + maxBox) * 0.5f - camera.Position;
@@ -360,5 +388,5 @@ void mouse_callback(sf::Window &window, sf::Event event)
         glm::vec3 closestPoint = glm::clamp(camera.Position, minBox, maxBox);
         camera.Position = (closestPoint + collisionVector * 0.0001f); // Deslizamiento mínimo
         break;
-     }
- }
+    }
+}
