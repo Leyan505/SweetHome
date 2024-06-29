@@ -1,63 +1,47 @@
-#include <Headers/MenuModal.h>
-#include <iostream>
+#include <Headers/Menu.h>
+Menu::Menu(float width, float height) {
+    if (!font.loadFromFile("HalloweenPartySt-14pB.ttf")) {
+        std::cout << "ERROR LOADING FONT" << std::endl;
+    }
 
+    menu[0].setFont(font);
+    menu[0].setFillColor(sf::Color::Red);
+    menu[0].setString("Play");
+    menu[0].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OF_ITEMS + 1) * 1));
 
-MenuModal::MenuModal(unsigned int width, unsigned int height)
-    : showModal(false), selectedOption(0), windowWidth(width), windowHeight(height)
-{
-    options[0] = "Option 1";
-    options[1] = "Option 2";
-    options[2] = "Option 3";
+    menu[1].setFont(font);
+    menu[1].setFillColor(sf::Color::White);
+    menu[1].setString("Options");
+    menu[1].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OF_ITEMS + 1) * 2));
 
-    modalBackground.setSize(sf::Vector2f(windowWidth * 0.5f, windowHeight * 0.5f));
-    modalBackground.setFillColor(sf::Color(50, 50, 50, 200));
-    modalBackground.setPosition(windowWidth * 0.25f, windowHeight * 0.25f);
+    menu[2].setFont(font);
+    menu[2].setFillColor(sf::Color::White);
+    menu[2].setString("Exit");
+    menu[2].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OF_ITEMS + 1) * 3));
 
-    if (!font.loadFromFile("arial.ttf"))
-    {
-        std::cerr << "Failed to load font" << std::endl;
+    selectedItemIndex = 0;
+}
+
+Menu::~Menu() {}
+
+void Menu::draw(sf::RenderWindow &window) {
+    for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++) {
+        window.draw(menu[i]);
     }
 }
 
-void MenuModal::render(sf::RenderWindow& window)
-{
-    window.pushGLStates();
-    window.resetGLStates();
-
-    window.draw(modalBackground);
-
-    for (int i = 0; i < 3; ++i)
-    {
-        sf::Text text;
-        text.setFont(font);
-        text.setString(options[i]);
-        text.setCharacterSize(24);
-        text.setFillColor(i == selectedOption ? sf::Color::Red : sf::Color::White);
-        text.setPosition(windowWidth * 0.3f, windowHeight * 0.35f + i * 50);
-        window.draw(text);
+void Menu::moveUp() {
+    if (selectedItemIndex - 1 >= 0) {
+        menu[selectedItemIndex].setFillColor(sf::Color::White);
+        selectedItemIndex--;
+        menu[selectedItemIndex].setFillColor(sf::Color::Red);
     }
-
-    window.popGLStates();
 }
 
-void MenuModal::processInput(sf::Event event)
-{
-    if (event.type == sf::Event::KeyPressed)
-    {
-        if (event.key.code == sf::Keyboard::Space)
-            toggleVisibility();
-
-        if (showModal)
-        {
-            if (event.key.code == sf::Keyboard::Up)
-                selectedOption = (selectedOption - 1 + 3) % 3;
-            if (event.key.code == sf::Keyboard::Down)
-                selectedOption = (selectedOption + 1) % 3;
-            if (event.key.code == sf::Keyboard::Enter)
-            {
-                std::cout << "Selected: " << options[selectedOption] << std::endl;
-                showModal = false; // Close the modal after selection
-            }
-        }
+void Menu::moveDown() {
+    if (selectedItemIndex + 1 < MAX_NUMBER_OF_ITEMS) {
+        menu[selectedItemIndex].setFillColor(sf::Color::White);
+        selectedItemIndex++;
+        menu[selectedItemIndex].setFillColor(sf::Color::Red);
     }
 }
