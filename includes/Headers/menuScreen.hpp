@@ -46,27 +46,61 @@ int handleInput(sf::RenderWindow &window, Menu &menu, bool &showCredits, bool &f
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Up) {
                 menu.moveUp();
+                int selectedItem = menu.getPressedItem();
+                std::cout<<selectedItem<<std::endl;
             } else if (event.key.code == sf::Keyboard::Down) {
                 menu.moveDown();
+                int selectedItem = menu.getPressedItem();
+                std::cout<<selectedItem<<std::endl;
             } else if (event.key.code == sf::Keyboard::Return) {
                 int selectedItem = menu.getPressedItem();
                 switch (selectedItem)
                 {
-                case 3:
-                    if(!first) {
-                        window.popGLStates();
+                    case 0:
+                        if(!first) {
+                            window.popGLStates();
+                            }
+                        else
+                        {
+                            first = false;
                         }
-                    else
-                    {
-                        first = false;
-                    }
-                    return (4);
-                    break;
-                case 4:
-                    showCredits = true;
-					return 0;
-                default:
-                    break;
+                        return (1);
+                        break;
+                    case 1:
+                        if(!first) {
+                            window.popGLStates();
+                            }
+                        else
+                        {
+                            first = false;
+                        }
+                        return (2);
+                        break;
+                    case 2:
+                        if(!first) {
+                            window.popGLStates();
+                            }
+                        else
+                        {
+                            first = false;
+                        }
+                        return (3);
+                        break;
+                    case 3:
+                        if(!first) {
+                            window.popGLStates();
+                            }
+                        else
+                        {
+                            first = false;
+                        }
+                        return (4);
+                        break;
+                    case 4:
+                        showCredits = true;
+                        return 0;
+                    default:
+                        break;
                 }
             } else if (event.key.code == sf::Keyboard::Escape) {
                 if (showCredits) {

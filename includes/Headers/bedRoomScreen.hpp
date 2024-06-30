@@ -1,5 +1,6 @@
 #include <iostream>
 #include "cScreen.hpp"
+#include "GameLogic.hpp"
 
 class bedRoomScreen : public cScreen
 {

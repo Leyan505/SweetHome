@@ -1,3 +1,5 @@
+#pragma once
+
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
