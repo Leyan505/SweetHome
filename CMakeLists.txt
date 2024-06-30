@@ -31,7 +31,7 @@ message(STATUS "Found ASSIMP in ${ASSIMP_INCLUDE_DIR}")
 
 
 if(WIN32)
-  set(LIBS glfw3 opengl32 assimp freetype irrKlang sfml-graphics)
+  set(LIBS glfw3 opengl32 assimp freetype irrKlang sfml-graphics sfml-audio)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 elseif(UNIX AND NOT APPLE)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
@@ -66,9 +66,15 @@ add_library(GLAD "src/glad.c")
 set(LIBS ${LIBS} GLAD)
 
 #[[ Prueba Modelos]]
-#add_executable(main src/ModelsMain.cpp)
-#target_link_libraries(main PRIVATE ${LIBS})
-#target_compile_features(main PRIVATE cxx_std_17)
+add_executable(main src/menuTest.cpp src/Menu.cpp )
+add_executable(living-room src/living-room.cpp)
+add_executable(hallway src/ModelsMain.cpp)
+
+target_link_libraries(living-room PRIVATE ${LIBS})
+target_link_libraries(hallway PRIVATE ${LIBS})
+target_link_libraries(main PRIVATE sfml-graphics sfml-window sfml-system)
+target_compile_features(living-room PRIVATE cxx_std_17)
+target_compile_features(hallway PRIVATE cxx_std_17)
 
 #Menu
 include(FetchContent)
@@ -78,9 +84,9 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 #[[Prueba Menu]]
-add_executable(main src/ModelsMain.cpp)
-target_link_libraries(main PRIVATE sfml-graphics ${LIBS})
-target_compile_features(main PRIVATE cxx_std_17)
+# add_executable(main src/menuTest.cpp src/Menu.cpp)
+# target_link_libraries(main PRIVATE sfml-graphics sfml-audio ${LIBS})
+# target_compile_features(main PRIVATE cxx_std_17)
 
 if(MSVC)
 		target_compile_options(main PRIVATE /std:c++17 /MP)
@@ -99,14 +105,16 @@ elseif(APPLE)
 endif(WIN32)
 
 file(GLOB SHADERS
-             "Resources/Shaders/*.vs"
+             "resources/shaders/*.vs"
              # "Resources/Shaders/*.frag"
-             "Resources/Shaders/*.fs"
-             "Resources/Shaders/*.tcs"
-             "Resources/Shaders/*.tes"
-             "Resources/Shaders/*.gs"
-             "Resources/Shaders/*.cs"
-             "Resources/Fonts/halloween-party-st-font/*.ttf"	
+             "resources/shaders/*.fs"
+             "resources/shaders/*.tcs"
+             "resources/shaders/*.tes"
+             "resources/shaders/*.gs"
+             "resources/shaders/*.cs"
+             "resources/shaders/*/*.vs"
+             "resources/shaders/*/*.fs"
+             "resources/fonts/halloween-party-st-font/*.ttf"	
 )
 
 # copy dlls

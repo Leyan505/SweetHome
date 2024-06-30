@@ -1,11 +1,11 @@
 Model Information:
-* title:	Scary Witch Hut Scene
-* source:	https://sketchfab.com/3d-models/scary-witch-hut-scene-f505719743c44d6cb05f4422888cdf8f
-* author:	RedDevon (https://sketchfab.com/RedDevon)
+* title:	The Outpost house
+* source:	https://sketchfab.com/3d-models/the-outpost-house-55d1fb80b83f4bef8da79ac9bdb4eb32
+* author:	Shannen Art (https://sketchfab.com/shannen_art)
 
 Model License:
 * license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 * requirements:	Author must be credited. Commercial use is allowed.
 
 If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
-This work is based on "Scary Witch Hut Scene" (https://sketchfab.com/3d-models/scary-witch-hut-scene-f505719743c44d6cb05f4422888cdf8f) by RedDevon (https://sketchfab.com/RedDevon) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+This work is based on "The Outpost house" (https://sketchfab.com/3d-models/the-outpost-house-55d1fb80b83f4bef8da79ac9bdb4eb32) by Shannen Art (https://sketchfab.com/shannen_art) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

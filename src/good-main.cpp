@@ -2,36 +2,33 @@
 #include <Headers/Menu.h> // Asegúrate de que Menu.h esté en el directorio correcto
 #include <iostream>
 #include <filesystem.h>
-#include <filesystem>
-#include <Windows.h>
+
 
 // Clase para manejar la pantalla de créditos
-class CreditsScreen
-{
+class CreditsScreen {
 public:
-    CreditsScreen(float width, float height)
-    {
-        if (!font.loadFromFile("HalloweenPartySt-14pB.ttf"))
-        {
+    CreditsScreen(float screenWidth, float screenHeight) {
+        if (!font.loadFromFile("HalloweenPartySt-14pB.ttf")) {
             std::cout << "ERROR LOADING FONT" << std::endl;
         }
 
-        background.setSize(sf::Vector2f(width, height));
+        // Configurar el tamaño y color del fondo
+        background.setSize(sf::Vector3f(screenWidth, screenHeight, 0));
         background.setFillColor(sf::Color(0, 0, 0, 150)); // Fondo semi-transparente
 
+        // Configurar el texto de los créditos
         creditsText.setFont(font);
         creditsText.setFillColor(sf::Color::White);
         creditsText.setCharacterSize(50); // Tamaño de letra más grande
         creditsText.setString("Desarrollado por:\n\nJose Andres Guido Escobar\nEloisse Francesca Molina Camacho\nJorge Isaac Lopez Aragon\nLia Carely Cruz Mendoza");
 
-        // Centrar el texto
+        // Centrar el texto y el fondo en la pantalla
         sf::FloatRect textRect = creditsText.getLocalBounds();
-        creditsText.setOrigin(textRect.width / 2.0f, textRect.height / 2.0f);
-        creditsText.setPosition(width / 2.0f, height / 2.0f);
+        background.setPosition(0.0f, 0.0f); // Posición del fondo en 3D
+        creditsText.setPosition(screenWidth * 0.5f - textRect.width * 0.5f, screenHeight * 0.5f - textRect.height * 0.5f); // Posición del texto en 3D
     }
 
-    void draw(sf::RenderWindow &window)
-    {
+    void draw(sf::RenderWindow &window) {
         window.draw(background);
         window.draw(creditsText);
     }
@@ -42,66 +39,29 @@ private:
     sf::Font font;
 };
 
-
-
-void runModel(const std::string& modelName) {
-#ifdef _WIN32
-    std::string command = "start " + modelName + ".exe";
-#else
-    std::string command = "./" + modelName;
-#endif
-    std::system(command.c_str());
-}
-void handleInput(sf::RenderWindow &window, Menu &menu, bool &showCredits)
-{
+void handleInput(sf::RenderWindow &window, Menu &menu, bool &showCredits) {
     sf::Event event;
-    while (window.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-        {
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
             window.close();
         }
 
-        if (event.type == sf::Event::KeyPressed)
-        {
-            if (event.key.code == sf::Keyboard::Up)
-            {
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Up) {
                 menu.moveUp();
-            }
-            else if (event.key.code == sf::Keyboard::Down)
-            {
+            } else if (event.key.code == sf::Keyboard::Down) {
                 menu.moveDown();
-            }
-            else if (event.key.code == sf::Keyboard::Return)
-            {
+            } else if (event.key.code == sf::Keyboard::Return) {
                 int selectedItem = menu.getPressedItem();
-                if (selectedItem == 2)
-                {
-                    runModel("living-room");
-                    exit(0);
-                }
-                else if (selectedItem == 3)
-                {
-                    runModel("hallway");
-                    exit(0);
-                }
-                else if (selectedItem == 4)
-                { // Créditos
+                if (selectedItem == 4) { // Créditos
                     showCredits = true;
-                }
-                else
-                {
+                } else {
                     std::cout << "Selected option: " << selectedItem << std::endl;
                 }
-            }
-            else if (event.key.code == sf::Keyboard::Escape)
-            {
-                if (showCredits)
-                {
+            } else if (event.key.code == sf::Keyboard::Escape) {
+                if (showCredits) {
                     showCredits = false;
-                }
-                else
-                {
+                } else {
                     window.close(); // Cerrar la ventana si se presiona Escape
                 }
             }
@@ -109,28 +69,22 @@ void handleInput(sf::RenderWindow &window, Menu &menu, bool &showCredits)
     }
 }
 
-void update()
-{
+void update() {
     // Aquí puedes agregar cualquier lógica de actualización que necesites
 }
 
-void render(sf::RenderWindow &window, Menu &menu, sf::Sprite &background, CreditsScreen &credits, bool showCredits)
-{
+void render(sf::RenderWindow &window, Menu &menu, sf::Sprite &background, CreditsScreen &credits, bool showCredits) {
     window.clear();
     window.draw(background); // Dibujar el fondo
-    if (showCredits)
-    {
+    if (showCredits) {
         credits.draw(window); // Dibujar la pantalla de créditos si está activa
-    }
-    else
-    {
+    } else {
         menu.draw(window); // Dibujar el menú sobre el fondo
     }
     window.display(); // Mostrar en pantalla
 }
 
-int main()
-{
+int main() {
     // Crear la ventana con el modo de video deseado
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
     sf::RenderWindow window(desktop, "Game Menu", sf::Style::Close | sf::Style::Fullscreen);
@@ -143,10 +97,9 @@ int main()
 
     // Cargar la textura de fondo desde un archivo
     sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile(FileSystem::getPath("Resources/Objects/menu/menu.png")))
-    { // Ruta absoluta al archivo de fondo
-        std::cerr << "Error loading background image" << std::endl;
-        return -1;
+    if (!backgroundTexture.loadFromFile(FileSystem::getPath("Resources/Objects/menu/menu.png"))) { // Ruta absoluta al archivo de fondo
+    std::cerr << "Error loading background image" << std::endl;
+    return -1;
     }
 
     // Crear el sprite con la textura cargada
@@ -159,10 +112,9 @@ int main()
 
     bool showCredits = false;
 
-    while (window.isOpen())
-    {
-        handleInput(window, menu, showCredits);                 // Manejar la entrada del usuario
-        update();                                               // Actualizar la lógica del juego si es necesario
+    while (window.isOpen()) {
+        handleInput(window, menu, showCredits); // Manejar la entrada del usuario
+        update(); // Actualizar la lógica del juego si es necesario
         render(window, menu, background, credits, showCredits); // Renderizar la escena
     }
 
