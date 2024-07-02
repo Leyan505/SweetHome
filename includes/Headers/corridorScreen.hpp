@@ -315,5 +315,5 @@ int corridorScreen::Run(sf::RenderWindow &App)
 	}
 
 	//Never reaching this point normally, but just in case, exit the application
-	return 0;
+	return -1;
 }
