@@ -84,10 +84,15 @@ int main()
     // load models
     // -----------
     // Model exterior(FileSystem::getPath("Resources/Objects/coralineMonsterHouse/coralineMonsterHouse.gltf"));
-    Model kitchen(FileSystem::getPath("Resources/Objects/kitchen-room/coraline.gltf"));
-    Model mesa(FileSystem::getPath("Resources/Objects/kitchen-table/coraline.gltf"));
-    Model refri(FileSystem::getPath("Resources/Objects/refri/coraline-copia.gltf"));
-    Model puerta(FileSystem::getPath("Resources/Objects/door/coraline-copia.gltf"));
+    Model kitchen(FileSystem::getPath("Resources/Objects/kitchen-room/room.gltf"));
+    Model table(FileSystem::getPath("Resources/Objects/kitchen-table/coraline-kitchen.gltf"));
+    Model fridge(FileSystem::getPath("Resources/Objects/kitchen-fridge/fridge.gltf"));
+    Model door(FileSystem::getPath("Resources/Objects/kitchen-door/coraline2.gltf"));
+    Model cake(FileSystem::getPath("Resources/Objects/kitchen-cake/cake.gltf"));
+    Model stove(FileSystem::getPath("Resources/Objects/kitchen-stove/stove.gltf"));
+    Model furniture(FileSystem::getPath("Resources/Objects/kitchen-furniture/furniture.gltf"));
+    Model boots(FileSystem::getPath("Resources/Objects/kitchen-boots/boots.gltf"));
+    Model furniture2(FileSystem::getPath("Resources/Objects/kitchen-furniture2/furniture2.gltf"));
     // draw in wireframe
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -108,38 +113,82 @@ int main()
         // render
         // ------
 
-        glm::vec3 maePos = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 maePos = glm::vec3(0.0f, 10.0f, 30.0f);
         glm::vec3 maeScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-        glm::vec3 refriPos = glm::vec3(-73.0f, 0.0f, 17.0f);
-        glm::vec3 refriScale = glm::vec3(1.2f, 1.2f, 1.2f);
+        glm::vec3 kitchenPos = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 kitchenScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-        glm::vec3 doorPos = glm::vec3(-36.0f, 0.0f, -45.0f);
-        glm::vec3 doorScale = glm::vec3(1.2f, 1.2f, 1.2f);
+    //y altura, z en x
+        glm::vec3 stovePos = glm::vec3(-73.0f, 0.0f, -10.0f);
+        glm::vec3 stoveScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-        glm::vec3 mesaPos = glm::vec3(1.0f, 0.0f, 4.0f);
-        glm::vec3 mesaScale = glm::vec3(1.3f, 1.3f, 1.3f);
+        glm::vec3 fridgePos = glm::vec3(-74.0f, 0.0f, 17.0f);
+        glm::vec3 fridgeScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-        if (CheckCollision(camera, refri, refriPos, refriScale))
+        glm::vec3 doorPos = glm::vec3(-39.0f, 0.0f, -45.0f);
+        glm::vec3 doorScale = glm::vec3(1.2f, 1.0f, 1.0f);
+
+        glm::vec3 tablePos = glm::vec3(-4.0f, 0.0f, 26.0f);
+        glm::vec3 tableScale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+        glm::vec3 cakePos = glm::vec3(-4.0f, 0.0f, 25.0f);
+        glm::vec3 cakeScale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+        glm::vec3 furniturePos = glm::vec3(0.0f, 0.0f, -35.0f);
+        glm::vec3 furnitureScale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+        glm::vec3 bootsPos = glm::vec3(-11.0f, 0.0f, -45.0f);
+        glm::vec3 bootsScale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+        glm::vec3 furniture2Pos = glm::vec3(67.0f, 22.0f, -1.0f);
+        glm::vec3 furniture2Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+        if (CheckCollision(camera, fridge, fridgePos, fridgeScale))
         {
-            processInput(window, refri, 1, refriPos, refriScale);
+            processInput(window, fridge, 1, fridgePos, fridgeScale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
-        else if (CheckCollision(camera, puerta, doorPos, doorScale))
+        else if (CheckCollision(camera, door, doorPos, doorScale))
         {
-            processInput(window, puerta, 1, doorPos, doorScale);
+            processInput(window, door, 1, doorPos, doorScale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
-        else if (CheckCollision(camera, mesa, mesaPos, mesaScale))
+        else if (CheckCollision(camera, table, tablePos, tableScale))
         {
-            processInput(window, mesa, 1, mesaPos, mesaScale);
+            processInput(window, table, 1, tablePos, tableScale);
+            std::cout << "¡Colision detectada!" << std::endl;
+        }
+        else if (CheckCollision(camera, cake, cakePos, cakeScale))
+        {
+            processInput(window, cake, 1, cakePos, cakeScale);
+            std::cout << "¡Colision detectada!" << std::endl;
+        }
+        else if (CheckCollision(camera, stove, stovePos, stoveScale))
+        {
+            processInput(window, stove, 1, stovePos, stoveScale);
+            std::cout << "¡Colision detectada!" << std::endl;
+        }
+        else if (CheckCollision(camera, furniture, furniturePos, furnitureScale))
+        {
+            processInput(window, furniture, 1, furniturePos, furnitureScale);
+            std::cout << "¡Colision detectada!" << std::endl;
+        }
+        else if (CheckCollision(camera, boots, bootsPos, bootsScale))
+        {
+            processInput(window, boots, 1, bootsPos, bootsScale);
+            std::cout << "¡Colision detectada!" << std::endl;
+        }
+        else if (CheckCollision(camera, furniture2, furniture2Pos, furniture2Scale))
+        {
+            processInput(window, furniture2, 1, furniture2Pos, furniture2Scale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
         else
         {
             //     // input
             //     // -----
-            processInput(window, kitchen, 0, glm::vec3(0.0f, 0.0f, 0.f), glm::vec3(1.0f, 1.0f, 1.0f));
+            processInput(window, kitchen, 0, kitchenPos, kitchenScale);
         }
 
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
@@ -163,28 +212,58 @@ int main()
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
+        model = glm::translate(model, kitchenPos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, kitchenScale);     // it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
         kitchen.Draw(ourShader);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, refriPos); // translate it down so it's at the center of the scene
-        model = glm::scale(model, refriScale);   // it's a bit too big for our scene, so scale it down
+        model = glm::translate(model, fridgePos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, fridgeScale);   // it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
-        refri.Draw(ourShader);
+        fridge.Draw(ourShader);
 
         model = glm::mat4(1.0f);
         model = glm::translate(model, doorPos); // translate it down so it's at the center of the scene
         model = glm::scale(model, doorScale);   // it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
-        puerta.Draw(ourShader);
+        door.Draw(ourShader);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, mesaPos); // translate it down so it's at the center of the scene
-        model = glm::scale(model, mesaScale);   // it's a bit too big for our scene, so scale it down
+        model = glm::translate(model, tablePos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, tableScale);   // it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
-        mesa.Draw(ourShader);
+        table.Draw(ourShader);
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, cakePos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, cakeScale);   // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        cake.Draw(ourShader);
+
+         model = glm::mat4(1.0f);
+        model = glm::translate(model, stovePos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, stoveScale);   // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        stove.Draw(ourShader);
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, furniturePos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, furnitureScale);   // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        furniture.Draw(ourShader);
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, bootsPos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, bootsScale);   // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        boots.Draw(ourShader);
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, furniture2Pos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, furniture2Scale);   // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        furniture2.Draw(ourShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -229,7 +308,7 @@ int main()
 void processInput(sf::Window &window, const Model &modelo, int mode, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
 
-    camera.Position.y = 5.0f;
+   camera.Position.y = 8.0f;
     // representa donde me encuentro yo
     std::cout << glm::to_string(camera.Position) << std::endl;
     if (mode == 1)
