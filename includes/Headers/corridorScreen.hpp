@@ -174,7 +174,7 @@ int corridorScreen::Run(sf::RenderWindow &App)
         else{*/
             // input
             // -----
-                Running = processInput(App, corridor, 0, stepSound, glm::vec3(0.0f), glm::vec3(1.0f));
+                Running = processInput(App, corridor, 0, stepSound,4, glm::vec3(0.0f), glm::vec3(1.0f));
             //}
             if (!Running)
             {

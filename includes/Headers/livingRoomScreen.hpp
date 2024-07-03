@@ -151,7 +151,7 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
         glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 10.0f);
 
 
-                Running = processInput(App, corridor, 0, stepSound, glm::vec3(0.0f), glm::vec3(1.0f));
+                Running = processInput(App, corridor, 0, stepSound,1, glm::vec3(0.0f), glm::vec3(1.0f));
     
             if (!Running)
             {

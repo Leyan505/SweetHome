@@ -29,31 +29,41 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &stepSound, int indice, glm::vec3 position, glm::vec3 scale);
+bool CheckCollision(const Camera &camera, const Model &model, glm::vec3 position, glm::vec3 scale);
+void resolveCollision(Camera &camera, const Model &model, glm::vec3 position, glm::vec3 scale);
 
-bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &stepSound, glm::vec3 position , glm::vec3 scale);
-bool CheckCollision(const Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
-void resolveCollision(Camera& camera, const Model& model, glm::vec3 position, glm::vec3 scale);
-
-bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &stepSound, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
+bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &stepSound, int indice, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
-    camera.Position.y = 0.0f;
-    //std::cout << glm::to_string(camera.Position) << std::endl;
+    if (indice == 2)
+    {
+        camera.Position.y = 7.0f;
+        camera.MovementSpeed = 25.0f;
+    }
+    else
+    {
+        camera.Position.y = 0.0f;
+    }
+    // std::cout << glm::to_string(camera.Position) << std::endl;
     if (mode == 1)
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        glm::vec3 front = camera.Front;
-        glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
-        if (!CheckCollision(newPos, modelo, position, scale))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {
-            camera.Position = newPos;
-            stepSound.pause();
-            stepSound.play();
-
+            glm::vec3 front = camera.Front;
+            glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
+            if (!CheckCollision(newPos, modelo, position, scale))
+            {
+                camera.Position = newPos;
+                stepSound.pause();
+                stepSound.play();
+            }
+            else if (indice != 2)
+            {
+                resolveCollision(camera, modelo, position, scale);
+            }
         }
-        else resolveCollision(camera, modelo, position, scale);
-        
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
@@ -62,9 +72,13 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else resolveCollision(camera, modelo, position, scale);
+            else if (indice != 2)
+            {
+                resolveCollision(camera, modelo, position, scale);
+            }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
@@ -73,9 +87,13 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else resolveCollision(camera, modelo, position, scale);
+            else if (indice != 2)
+            {
+                resolveCollision(camera, modelo, position, scale);
+            }
         }
-        if  (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
             if (!CheckCollision(newPos, modelo, position, scale))
@@ -84,12 +102,16 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else resolveCollision(camera, modelo, position, scale);
+            else if (indice != 2)
+            {
+                resolveCollision(camera, modelo, position, scale);
+            }
         }
     }
     else
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
@@ -98,9 +120,13 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else resolveCollision(camera, modelo, position, scale);
+            else if (indice != 2)
+            {
+                resolveCollision(camera, modelo, position, scale);
+            }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
@@ -109,9 +135,13 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else resolveCollision(camera, modelo, position, scale);
+            else if (indice != 2)
+            {
+                resolveCollision(camera, modelo, position, scale);
+            }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
@@ -120,9 +150,13 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else resolveCollision(camera, modelo, position, scale);
+            else if (indice != 2)
+            {
+                resolveCollision(camera, modelo, position, scale);
+            }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
             if (CheckCollision(newPos, modelo, position, scale))
@@ -131,7 +165,10 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else resolveCollision(camera, modelo, position, scale);
+            else if (indice != 2)
+            {
+                resolveCollision(camera, modelo, position, scale);
+            }
         }
     }
 
@@ -141,7 +178,6 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
     return true;
 }
 
-
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 /*void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -149,61 +185,60 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }*/
 
-//funciones
- bool CheckCollision(const Camera & camera, const Model & model, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) {
-     // Obtenemos la posición de la cámara
-     glm::vec3 cameraPos = camera.Position;
+// funciones
+bool CheckCollision(const Camera &camera, const Model &model, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
+{
+    // Obtenemos la posición de la cámara
+    glm::vec3 cameraPos = camera.Position;
 
-     // Iteramos sobre las mallas del modelo
-     for (const auto& mesh : model.meshes) 
-     {  
-         // Obtenemos la posición y dimensiones de la caja de colisión de la malla
-         glm::vec3 minBox = mesh.boundingBox.min;
-         glm::vec3 maxBox = mesh.boundingBox.max;
-
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, position); // translate it down so it's at the center of the scene
-        model = glm::scale(model, scale);	// it's a bit too big for our scene, so scale it down
-        minBox = model * glm::vec4(minBox,1.0f);
-        maxBox = model * glm::vec4(maxBox, 1.0f);
-
-        if(position == glm::vec3(0.0f))
-        {
-            minBox = minBox+0.1f;
-            maxBox = maxBox-0.1f;
-        }
-
-
-         // Comprobamos si la posición de la cámara está dentro de la caja de colisión
-         if (cameraPos.x >= minBox.x && cameraPos.x <= maxBox.x &&
-             cameraPos.y >= minBox.y && cameraPos.y <= maxBox.y &&
-             cameraPos.z >= minBox.z && cameraPos.z <= maxBox.z) 
-         {
-             // Si la posición de la cámara está dentro de la caja de colisión, hay colisión
-             return true;
-         }
-
-     }
-
-     // Si ninguna malla tiene colisión con la cámara, retornamos false
-     return false;
- }
-
- void resolveCollision(Camera & camera, const Model & model, glm::vec3 position, glm::vec3 scale = glm::vec3(1.0f)) {
-
-     // Iteramos sobre las mallas del modelo
-     for (const auto& mesh : model.meshes) 
-     {
+    // Iteramos sobre las mallas del modelo
+    for (const auto &mesh : model.meshes)
+    {
+        // Obtenemos la posición y dimensiones de la caja de colisión de la malla
         glm::vec3 minBox = mesh.boundingBox.min;
         glm::vec3 maxBox = mesh.boundingBox.max;
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, position); // translate it down so it's at the center of the scene
-        model = glm::scale(model, scale);	// it's a bit too big for our scene, so scale it down
-        minBox = model * glm::vec4(minBox,1.0f);
+        model = glm::scale(model, scale);        // it's a bit too big for our scene, so scale it down
+        minBox = model * glm::vec4(minBox, 1.0f);
         maxBox = model * glm::vec4(maxBox, 1.0f);
 
-        
+        if (position == glm::vec3(0.0f))
+        {
+            minBox = minBox + 0.1f;
+            maxBox = maxBox - 0.1f;
+        }
+
+        // Comprobamos si la posición de la cámara está dentro de la caja de colisión
+        if (cameraPos.x >= minBox.x && cameraPos.x <= maxBox.x &&
+            cameraPos.y >= minBox.y && cameraPos.y <= maxBox.y &&
+            cameraPos.z >= minBox.z && cameraPos.z <= maxBox.z)
+        {
+            // Si la posición de la cámara está dentro de la caja de colisión, hay colisión
+            return true;
+        }
+    }
+
+    // Si ninguna malla tiene colisión con la cámara, retornamos false
+    return false;
+}
+
+void resolveCollision(Camera &camera, const Model &model, glm::vec3 position, glm::vec3 scale = glm::vec3(1.0f))
+{
+
+    // Iteramos sobre las mallas del modelo
+    for (const auto &mesh : model.meshes)
+    {
+        glm::vec3 minBox = mesh.boundingBox.min;
+        glm::vec3 maxBox = mesh.boundingBox.max;
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, position); // translate it down so it's at the center of the scene
+        model = glm::scale(model, scale);        // it's a bit too big for our scene, so scale it down
+        minBox = model * glm::vec4(minBox, 1.0f);
+        maxBox = model * glm::vec4(maxBox, 1.0f);
+
         // Resolvemos la colisión ajustando ligeramente la dirección del movimiento
         // Encuentra el vector desde la cámara hasta el punto medio de la caja de colisión
         glm::vec3 collisionVector = (minBox + maxBox) * 0.5f - camera.Position;
@@ -215,5 +250,5 @@ bool processInput(sf::Window &App, const Model& modelo, int mode, sf::Sound &ste
         glm::vec3 closestPoint = glm::clamp(camera.Position, minBox, maxBox);
         camera.Position = (closestPoint + collisionVector * 0.0001f); // Deslizamiento mínimo
         break;
-     }
- }
+    }
+}
