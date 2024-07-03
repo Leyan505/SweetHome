@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 	Screens.push_back(&s1);
 	kitchenScreen s2;
 	Screens.push_back(&s2);
-	livingRoomScreen s3;
+	bedRoomScreen s3;
 	Screens.push_back(&s3);
 	corridorScreen s4;
 	Screens.push_back(&s4);
