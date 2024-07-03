@@ -35,15 +35,22 @@ void resolveCollision(Camera &camera, const Model &model, glm::vec3 position, gl
 
 bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &stepSound, int indice, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
+    std::cout << glm::to_string(camera.Position) << std::endl;
     if (indice == 2)
     {
         camera.Position.y = 7.0f;
         camera.MovementSpeed = 25.0f;
     }
+    else if(indice==3){
+        //camera.Position.x= 40.0f;
+        camera.Position.y = 40.0f;
+        camera.MovementSpeed = 30.0f;
+    }
     else
     {
         camera.Position.y = 0.0f;
     }
+
     // std::cout << glm::to_string(camera.Position) << std::endl;
     if (mode == 1)
     {
@@ -57,10 +64,11 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2)
+            else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            } 
+    
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
@@ -72,7 +80,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2)
+            else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
             }
@@ -87,7 +95,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2)
+            else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
             }
@@ -102,7 +110,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2)
+            else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
             }
@@ -120,7 +128,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2)
+            else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
             }
@@ -135,7 +143,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2)
+            else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
             }
@@ -150,10 +158,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2)
+            else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
@@ -165,7 +173,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2)
+            else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
             }
