@@ -190,7 +190,7 @@ int corridorScreen::Run(sf::RenderWindow &App)
          lightCubeShader.setMat4("projection", projection);
          lightCubeShader.setMat4("view", view);
     
-        /* // we now draw as many light bulbs as we have point lights.
+        // we now draw as many light bulbs as we have point lights.
          glBindVertexArray(lightCubeVAO);
          for (unsigned int i = 0; i < sizeof(pointLightPositions)/sizeof(glm::vec3); i++)
          {
@@ -199,7 +199,7 @@ int corridorScreen::Run(sf::RenderWindow &App)
              model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
              lightCubeShader.setMat4("model", model);
              glDrawArrays(GL_TRIANGLES, 0, 36);
-         }*/
+         }
 
         // don't forget to enable shader before setting uniforms
         lightingShader.use();
