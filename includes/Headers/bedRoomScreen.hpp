@@ -34,16 +34,16 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
 
     sf::Music music1;
     sf::Music music2;
-    sf::Music music3;
-    sf::Music music4;
+    // sf::Music music3;
+    // sf::Music music4;
     if (!music1.openFromFile(FileSystem::getPath("resources/audio/CoralineSoundtrack1.mp3")))
         return 1;
     music1.setPosition(0, 1, 20);
     music1.setVolume(10.0f);
     music1.setLoop(true);
     music1.play();
-    // Time beetween sound  (seconds)
-    float timeBetweenSounds = 20.0f; //
+    //Time beetween sound  (seconds)
+    float timeBetweenSounds = 20.0f; // main music
 
     sf::sleep(sf::seconds(timeBetweenSounds));
 
@@ -53,28 +53,28 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
     music2.setVolume(70.0f); // adjust the volume
     music2.setLoop(true);
     music2.play();
-    sf::sleep(sf::seconds(timeBetweenSounds));
+    //sf::sleep(sf::seconds(timeBetweenSounds));
     music2.stop();
 
-    sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
-    if (!music3.openFromFile(FileSystem::getPath("resources/audio/motherschatting.mp3")))
-        return -1;
-    music3.setPosition(0, 1, 10);
-    music3.setVolume(70.0f); // ajust the volume
-    music3.setLoop(true);
-    music3.play();
-    sf::sleep(sf::seconds(timeBetweenSounds));
-    music3.stop();
+    // sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
+    // if (!music3.openFromFile(FileSystem::getPath("resources/audio/motherschatting.mp3")))
+    //     return -1;
+    // music3.setPosition(0, 1, 10);
+    // music3.setVolume(70.0f); // ajust the volume
+    // music3.setLoop(true);
+    // music3.play();
+    // sf::sleep(sf::seconds(timeBetweenSounds));
+    // music3.stop();
 
-    sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
-    if (!music3.openFromFile(FileSystem::getPath("resources/audio/WelcomeHome.mp3")))
-        return -1;
-    music3.setPosition(0, 1, 10);
-    music3.setVolume(70.0f); // ajust the volume
-    music3.setLoop(true);
-    music3.play();
-    sf::sleep(sf::seconds(timeBetweenSounds));
-    music3.stop();
+    // sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
+    // if (!music3.openFromFile(FileSystem::getPath("resources/audio/WelcomeHome.mp3")))
+    //     return -1;
+    // music3.setPosition(0, 1, 10);
+    // music3.setVolume(70.0f); // ajust the volume
+    // music3.setLoop(true);
+    // music3.play();
+    // sf::sleep(sf::seconds(timeBetweenSounds));
+    // music3.stop();
 
 
     // std::vector<std::string> musicFiles {
@@ -82,7 +82,7 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
     //     (FileSystem::getPath("resources/audio/Motherschatting.mp3")),
     //     (FileSystem::getPath("resources/audio/FathersSong.mp3")),
     //     (FileSystem::getPath("resources/audio/welcomeHome.mp3"))};
-    
+
     // std::vector<sf::Music> musics;
 
     // // Cargar cada música en el vector musics
