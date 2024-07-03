@@ -140,7 +140,7 @@ int houseScreen::Run(sf::RenderWindow &App)
     sf::Clock clock;
 
     sf::Music music;
-    if(!music.openFromFile(FileSystem::getPath("resources/audio/explorationCoraline.mp3")))
+    if(!music.openFromFile(FileSystem::getPath("resources/audio/dreamsAreDangerous.mp3")))
         return 1;
     music.setVolume(25.0f);
     music.setLoop(true);
