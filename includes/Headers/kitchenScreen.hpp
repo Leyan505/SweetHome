@@ -31,25 +31,34 @@ int kitchenScreen::Run(sf::RenderWindow &App)
     // -----------
     // Model exterior(FileSystem::getPath("Resources/Objects/coralineMonsterHouse/coralineMonsterHouse.gltf"));
     Model kitchen(FileSystem::getPath("Resources/Objects/kitchen-room/room.gltf"));
-    Model table(FileSystem::getPath("Resources/Objects/kitchen-table/coraline-kitchen.gltf"));
+    Model table(FileSystem::getPath("Resources/Objects/kitchen-table/table.gltf"));
+    Model cake(FileSystem::getPath("Resources/Objects/kitchen-cake/cake.gltf"));
     Model fridge(FileSystem::getPath("Resources/Objects/kitchen-fridge/fridge.gltf"));
     Model door(FileSystem::getPath("Resources/Objects/kitchen-door/door.gltf"));
-    Model cake(FileSystem::getPath("Resources/Objects/kitchen-cake/cake.gltf"));
-    Model stove(FileSystem::getPath("Resources/Objects/kitchen-stove/stove.gltf"));
     Model furniture(FileSystem::getPath("Resources/Objects/kitchen-furniture/furniture.gltf"));
-    Model boots(FileSystem::getPath("Resources/Objects/kitchen-boots/boots.gltf"));
     Model furniture2(FileSystem::getPath("Resources/Objects/kitchen-furniture2/furniture2.gltf"));
+    Model boots(FileSystem::getPath("Resources/Objects/kitchen-boots/boots.gltf"));
+    Model stove(FileSystem::getPath("Resources/Objects/kitchen-stove/stove.gltf"));
+    Model table2(FileSystem::getPath("Resources/Objects/kitchen-table2/table2.gltf"));
     // draw in wireframe
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     sf::Clock clock;
 
 	sf::Music music;
-    if(!music.openFromFile(FileSystem::getPath("resources/audio/explorationCoraline.mp3")))
-        return 1;
-    music.setVolume(25.0f);
+    sf::Music door_sound;
+
+    if(!music.openFromFile(FileSystem::getPath("resources/audio/end_credits.mp3")))
+        return -1;
+    music.setVolume(15.0f);
     music.setLoop(true);
     music.play();
+
+    if(!door_sound.openFromFile(FileSystem::getPath("resources/audio/door_knock.mp3")))
+        return -1;
+    door_sound.setVolume(90.0f);
+    door_sound.setLoop(true);
+    //door_sound.play();
 
     sf::SoundBuffer buffer;
     if(!buffer.loadFromFile(FileSystem::getPath("resources/audio/step.mp3")))
@@ -57,10 +66,13 @@ int kitchenScreen::Run(sf::RenderWindow &App)
     sf::Sound stepSound;
     stepSound.setBuffer(buffer);
     stepSound.setVolume(25.0f);
+    int sonido_puerta = 0;
 
     bool Running = true;
+   camera.Position = glm::vec3(45.5f, 4.0f, -6.5f);
 	while (Running)
 	{
+
 		float currentFrame = static_cast<float>(clock.getElapsedTime().asSeconds());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
@@ -87,6 +99,9 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         glm::vec3 tablePos = glm::vec3(-4.0f, 0.0f, 26.0f);
         glm::vec3 tableScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
+        glm::vec3 tablePos2 = glm::vec3(-49.0f, 0.0f, 27.0f);
+        glm::vec3 tableScale2 = glm::vec3(1.0f, 1.0f, 1.0f);
+
         glm::vec3 cakePos = glm::vec3(-4.0f, 0.0f, 25.0f);
         glm::vec3 cakeScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -108,6 +123,8 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         {
             Running = processInput(App, door, 1,stepSound,2, doorPos, doorScale);
             std::cout << "¡Colision detectada!" << std::endl;
+            door_sound.pause();
+            door_sound.play();
         }
         else if (CheckCollision(camera, table, tablePos, tableScale))
         {
@@ -139,10 +156,16 @@ int kitchenScreen::Run(sf::RenderWindow &App)
             Running = processInput(App, furniture2, 1, stepSound, 2, furniture2Pos, furniture2Scale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
+        else if (CheckCollision(camera, table2, tablePos2, tableScale2))
+        {
+            Running = processInput(App, table2, 1, stepSound, 2, tablePos2, tableScale2);
+            std::cout << "¡Colision detectada!" << std::endl;
+        }
         else
         {
             //     // input
             //     // -----
+            door_sound.pause();
             Running = processInput(App, kitchen, 0,stepSound,2, kitchenPos, kitchenScale);
         }
         if (!Running)
@@ -225,6 +248,12 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         model = glm::scale(model, furniture2Scale);   // it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
         furniture2.Draw(ourShader);
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, tablePos2); // translate it down so it's at the center of the scene
+        model = glm::scale(model, tableScale2);   // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        table2.Draw(ourShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

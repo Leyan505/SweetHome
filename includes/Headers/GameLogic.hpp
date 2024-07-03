@@ -38,7 +38,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
     std::cout << glm::to_string(camera.Position) << std::endl;
     if (indice == 2)
     {
-        camera.Position.y = 7.0f;
+        camera.Position.y = 4.0f;
         camera.MovementSpeed = 25.0f;
     }
     else if(indice==3){
