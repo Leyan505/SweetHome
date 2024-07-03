@@ -78,6 +78,8 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
 
     srand((unsigned) time(NULL)); 
 
+    camera.Position = glm::vec3(0.0f, -10.0f, -1.0f);
+
     bool Running = true;
 
 	while (Running)
@@ -91,7 +93,7 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
         glm::vec3 maeScale = glm::vec3(1.0f, 10.0f, 10.0f);
 
 
-                Running = processInput(App, corridor, 0, stepSound,1, glm::vec3(0.0f), glm::vec3(1.0f));
+                Running = processInput(App, corridor, 0, stepSound, 1, glm::vec3(0.0f), glm::vec3(1.0f));
     
             if (!Running)
             {
@@ -115,14 +117,14 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
            by using 'Uniform buffer objects', but that is something we'll discuss in the 'Advanced GLSL' tutorial.
         */
         lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-        lightingShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-        lightingShader.setVec3("dirLight.diffuse", 0.04f, 0.04f, 0.04f);
+        lightingShader.setVec3("dirLight.ambient", 0.5f, 0.5f, 0.5f);
+        lightingShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
         lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
         for (int i = 0; i < (sizeof(pointLightPositions)/sizeof(glm::vec3))-1; i++)
         {
             // Cambiar colores de la iluminación
             lightingShader.setVec3("pointLights["+ std::to_string(i) +"].position", pointLightPositions[i]);
-            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].ambient", 0.5f, 0.5f, 0.5f);
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].ambient", 0.2f, 0.2f, 0.2f);
             lightingShader.setVec3("pointLights["+ std::to_string(i) +"].diffuse", 0.3f, 0.3f, 0.5f);
             lightingShader.setVec3("pointLights["+ std::to_string(i) +"].specular", 1.0f, 1.0f, 1.0f);
             lightingShader.setFloat("pointLights["+ std::to_string(i) +"].constant", 1.0f);
