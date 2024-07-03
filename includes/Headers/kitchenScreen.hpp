@@ -5,10 +5,9 @@
 class kitchenScreen : public cScreen
 {
 private:
-
 public:
-	kitchenScreen(void);
-	virtual int Run(sf::RenderWindow &App);
+    kitchenScreen(void);
+    virtual int Run(sf::RenderWindow &App);
 };
 
 kitchenScreen::kitchenScreen(void)
@@ -17,15 +16,14 @@ kitchenScreen::kitchenScreen(void)
 
 int kitchenScreen::Run(sf::RenderWindow &App)
 {
-	stbi_set_flip_vertically_on_load(false);
+    stbi_set_flip_vertically_on_load(false);
 
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
     // build and compile shaders
-    // -------------------------
-    Shader ourShader("1.model_loading.vs", "1.model_loading.fs");
+    // ------------------------
 
     // load models
     // -----------
@@ -43,25 +41,54 @@ int kitchenScreen::Run(sf::RenderWindow &App)
     // draw in wireframe
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    // shaders de luz
+    Shader lightingShader("lighting_kitchen.vs", "lighting_kitchen.fs");
+    Shader lightCubeShader("light_cube.vs", "light_cube.fs");
+
+    // positions of the point lights
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3(0.0f, 0.0f, 0.0)};
+
+    // first, configure the cube's VAO (and VBO)
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
+    unsigned int lightCubeVAO;
+    glGenVertexArrays(1, &lightCubeVAO);
+    glBindVertexArray(lightCubeVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // note that we update the lamp's position attribute's stride to reflect the updated buffer data
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    // shader configuration
+    // --------------------
+    lightingShader.use();
+    lightingShader.setInt("material.diffuse", 0);
+    lightingShader.setInt("material.specular", 1);
+
     sf::Clock clock;
 
-	sf::Music music;
+    sf::Music music;
     sf::Music door_sound;
 
-    if(!music.openFromFile(FileSystem::getPath("resources/audio/end_credits.mp3")))
+    if (!music.openFromFile(FileSystem::getPath("resources/audio/end_credits.mp3")))
         return -1;
     music.setVolume(15.0f);
     music.setLoop(true);
     music.play();
 
-    if(!door_sound.openFromFile(FileSystem::getPath("resources/audio/door_knock.mp3")))
+    if (!door_sound.openFromFile(FileSystem::getPath("resources/audio/door_knock.mp3")))
         return -1;
     door_sound.setVolume(90.0f);
     door_sound.setLoop(true);
-    //door_sound.play();
+    // door_sound.play();
 
     sf::SoundBuffer buffer;
-    if(!buffer.loadFromFile(FileSystem::getPath("resources/audio/step.mp3")))
+    if (!buffer.loadFromFile(FileSystem::getPath("resources/audio/step.mp3")))
         return -1;
     sf::Sound stepSound;
     stepSound.setBuffer(buffer);
@@ -69,11 +96,11 @@ int kitchenScreen::Run(sf::RenderWindow &App)
     int sonido_puerta = 0;
 
     bool Running = true;
-   camera.Position = glm::vec3(45.5f, 4.0f, -6.5f);
-	while (Running)
-	{
+    camera.Position = glm::vec3(45.5f, 4.0f, -6.5f);
+    while (Running)
+    {
 
-		float currentFrame = static_cast<float>(clock.getElapsedTime().asSeconds());
+        float currentFrame = static_cast<float>(clock.getElapsedTime().asSeconds());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -86,7 +113,7 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         glm::vec3 kitchenPos = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 kitchenScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-    //y altura, z en x
+        // y altura, z en x
         glm::vec3 stovePos = glm::vec3(-73.0f, 0.0f, -10.0f);
         glm::vec3 stoveScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -116,39 +143,39 @@ int kitchenScreen::Run(sf::RenderWindow &App)
 
         if (CheckCollision(camera, fridge, fridgePos, fridgeScale))
         {
-            Running = processInput(App, fridge, 1,stepSound, 2, fridgePos, fridgeScale);
+            Running = processInput(App, fridge, 1, stepSound, 2, fridgePos, fridgeScale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
         else if (CheckCollision(camera, door, doorPos, doorScale))
         {
-            Running = processInput(App, door, 1,stepSound,2, doorPos, doorScale);
+            Running = processInput(App, door, 1, stepSound, 2, doorPos, doorScale);
             std::cout << "¡Colision detectada!" << std::endl;
             door_sound.pause();
             door_sound.play();
         }
         else if (CheckCollision(camera, table, tablePos, tableScale))
         {
-            Running = processInput(App, table, 1, stepSound,2, tablePos, tableScale);
+            Running = processInput(App, table, 1, stepSound, 2, tablePos, tableScale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
         else if (CheckCollision(camera, cake, cakePos, cakeScale))
         {
-            Running = processInput(App, cake, 1,stepSound, 2,cakePos, cakeScale);
+            Running = processInput(App, cake, 1, stepSound, 2, cakePos, cakeScale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
         else if (CheckCollision(camera, stove, stovePos, stoveScale))
         {
-            Running = processInput(App, stove, 1, stepSound,2, stovePos, stoveScale);
+            Running = processInput(App, stove, 1, stepSound, 2, stovePos, stoveScale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
         else if (CheckCollision(camera, furniture, furniturePos, furnitureScale))
         {
-            Running = processInput(App, furniture, 1, stepSound,2, furniturePos, furnitureScale);
+            Running = processInput(App, furniture, 1, stepSound, 2, furniturePos, furnitureScale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
         else if (CheckCollision(camera, boots, bootsPos, bootsScale))
         {
-            Running = processInput(App, boots, 1,stepSound, 2, bootsPos, bootsScale);
+            Running = processInput(App, boots, 1, stepSound, 2, bootsPos, bootsScale);
             std::cout << "¡Colision detectada!" << std::endl;
         }
         else if (CheckCollision(camera, furniture2, furniture2Pos, furniture2Scale))
@@ -166,26 +193,52 @@ int kitchenScreen::Run(sf::RenderWindow &App)
             //     // input
             //     // -----
             door_sound.pause();
-            Running = processInput(App, kitchen, 0,stepSound,2, kitchenPos, kitchenScale);
+            Running = processInput(App, kitchen, 0, stepSound, 2, kitchenPos, kitchenScale);
         }
         if (!Running)
-            {
-                App.pushGLStates();
-                App.resetGLStates(); 
-                return 0;
-            }
-            
+        {
+            App.pushGLStates();
+            App.resetGLStates();
+            return 0;
+        }
+
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // don't forget to enable shader before setting uniforms
-        ourShader.use();
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader.use();
+        lightingShader.setVec3("viewPos", camera.Position);
+        lightingShader.setFloat("material.shininess", 32.0f);
 
-        // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 200000.0f);
+        lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        lightingShader.setVec3("dirLight.ambient", 0.9f, 0.9f, 0.9f);
+        lightingShader.setVec3("dirLight.diffuse", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+        for (int i = 0; i < (sizeof(pointLightPositions)/sizeof(glm::vec3)); i++)
+        {
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].position", pointLightPositions[i]);
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].ambient", 0.2f, 0.2f, 0.2f);
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].diffuse",0.2f, 0.2f, 0.2f);
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].specular", 1.0f, 1.0f, 1.0f);
+            lightingShader.setFloat("pointLights["+ std::to_string(i) +"].constant", 1.0f);
+            lightingShader.setFloat("pointLights["+ std::to_string(i) +"].linear", 0.014f);
+            lightingShader.setFloat("pointLights["+ std::to_string(i) +"].quadratic", 0.007f);
+        }
+
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 2000.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        ourShader.setMat4("projection", projection);
-        ourShader.setMat4("view", view);
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setMat4("view", view);
+
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        lightingShader.setMat4("model", model);
+
+        // also draw the lamp object(s)
+         lightCubeShader.use();
+         lightCubeShader.setMat4("projection", projection);
+         lightCubeShader.setMat4("view", view);
+
 
         // render the loaded model
         // glm::mat4 model = glm::mat4(1.0f);
@@ -194,66 +247,75 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         // ourShader.setMat4("model", model);
         // mae.Draw(ourShader);
 
-        glm::mat4 model = glm::mat4(1.0f);
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, kitchenPos); // translate it down so it's at the center of the scene
-        model = glm::scale(model, kitchenScale);     // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        kitchen.Draw(ourShader);
+        model = glm::scale(model, kitchenScale);   // it's a bit too big for our scene, so scale it down
+        lightingShader.setMat4("model", model);
+        kitchen.Draw(lightingShader);
 
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, fridgePos); // translate it down so it's at the center of the scene
         model = glm::scale(model, fridgeScale);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        fridge.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        fridge.Draw(lightingShader);
 
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, doorPos); // translate it down so it's at the center of the scene
         model = glm::scale(model, doorScale);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        door.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        door.Draw(lightingShader);
 
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, tablePos); // translate it down so it's at the center of the scene
         model = glm::scale(model, tableScale);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        table.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        table.Draw(lightingShader);
 
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, cakePos); // translate it down so it's at the center of the scene
         model = glm::scale(model, cakeScale);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        cake.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        cake.Draw(lightingShader);
 
-         model = glm::mat4(1.0f);
+        lightingShader.use();
+        model = glm::mat4(1.0f);
         model = glm::translate(model, stovePos); // translate it down so it's at the center of the scene
         model = glm::scale(model, stoveScale);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        stove.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        stove.Draw(lightingShader);
 
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, furniturePos); // translate it down so it's at the center of the scene
         model = glm::scale(model, furnitureScale);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        furniture.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        furniture.Draw(lightingShader);
 
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, bootsPos); // translate it down so it's at the center of the scene
         model = glm::scale(model, bootsScale);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        boots.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        boots.Draw(lightingShader);
 
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, furniture2Pos); // translate it down so it's at the center of the scene
         model = glm::scale(model, furniture2Scale);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        furniture2.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        furniture2.Draw(lightingShader);
 
+        lightingShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, tablePos2); // translate it down so it's at the center of the scene
         model = glm::scale(model, tableScale2);   // it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        table2.Draw(ourShader);
+        lightingShader.setMat4("model", model);
+        table2.Draw(lightingShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -287,6 +349,6 @@ int kitchenScreen::Run(sf::RenderWindow &App)
                 glViewport(0, 0, event.size.width, event.size.height);
             }
         }
-	}
+    }
     return -1;
 }

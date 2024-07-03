@@ -35,7 +35,7 @@ void resolveCollision(Camera &camera, const Model &model, glm::vec3 position, gl
 
 bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &stepSound, int indice, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f))
 {
-    std::cout << glm::to_string(camera.Position) << std::endl;
+    //std::cout << glm::to_string(camera.Position) << std::endl;
     if (indice == 2)
     {
         camera.Position.y = 4.0f;
@@ -61,62 +61,62 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
         {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
-            if (!CheckCollision(newPos, modelo, position, scale))
-            {
+            // if (!CheckCollision(newPos, modelo, position, scale))
+            // {
                 camera.Position = newPos;
                 stepSound.pause();
                 stepSound.play();
-            }
-            else if (indice != 2 && indice != 3)
-            {
-                resolveCollision(camera, modelo, position, scale);
-            } 
+            // }
+            // else if (indice != 2 && indice != 3)
+            // {
+            //     resolveCollision(camera, modelo, position, scale);
+            // } 
     
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
-            if (!CheckCollision(newPos, modelo, position, scale))
-            {
+            // if (!CheckCollision(newPos, modelo, position, scale))
+            // {
                 camera.Position = newPos;
                 stepSound.pause();
                 stepSound.play();
-            }
-            else if (indice != 2 && indice != 3)
-            {
-                resolveCollision(camera, modelo, position, scale);
-            }
+            // }
+            // else if (indice != 2 && indice != 3)
+            // {
+            //     resolveCollision(camera, modelo, position, scale);
+            // }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
-            if (!CheckCollision(newPos, modelo, position, scale))
-            {
+            // if (!CheckCollision(newPos, modelo, position, scale))
+            // {
                 camera.Position = newPos;
                 stepSound.pause();
                 stepSound.play();
-            }
-            else if (indice != 2 && indice != 3)
-            {
-                resolveCollision(camera, modelo, position, scale);
-            }
+            // }
+            // else if (indice != 2 && indice != 3)
+            // {
+            //     resolveCollision(camera, modelo, position, scale);
+            // }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
-            if (!CheckCollision(newPos, modelo, position, scale))
-            {
+            // if (!CheckCollision(newPos, modelo, position, scale))
+            // {
                 camera.Position = newPos;
                 stepSound.pause();
                 stepSound.play();
-            }
-            else if (indice != 2 && indice != 3)
-            {
-                resolveCollision(camera, modelo, position, scale);
-            }
+            // }
+            // else if (indice != 2 && indice != 3)
+            // {
+            //     resolveCollision(camera, modelo, position, scale);
+            // }
         }
     }
     else
@@ -125,61 +125,61 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
         {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position + front * camera.MovementSpeed * deltaTime;
-            if (CheckCollision(newPos, modelo, position, scale))
-            {
+            // if (CheckCollision(newPos, modelo, position, scale))
+            // {
                 camera.Position = newPos;
                 stepSound.pause();
                 stepSound.play();
-            }
-            else if (indice != 2 && indice != 3 && indice != 5)
-            {
-                resolveCollision(camera, modelo, position, scale);
-            }
+            // }
+            // else if (indice != 2 && indice != 3 && indice != 5)
+            // {
+            //     resolveCollision(camera, modelo, position, scale);
+            // }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
             glm::vec3 front = camera.Front;
             glm::vec3 newPos = camera.Position - front * camera.MovementSpeed * deltaTime;
-            if (CheckCollision(newPos, modelo, position, scale))
-            {
+            // if (CheckCollision(newPos, modelo, position, scale))
+            // {
                 camera.Position = newPos;
                 stepSound.pause();
                 stepSound.play();
-            }
-            else if (indice != 2 && indice != 3 && indice != 5)
-            {
-                resolveCollision(camera, modelo, position, scale);
-            }
+            // }
+            // else if (indice != 2 && indice != 3 && indice != 5)
+            // {
+            //     resolveCollision(camera, modelo, position, scale);
+            // }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position - right * camera.MovementSpeed * deltaTime;
-            if (CheckCollision(newPos, modelo, position, scale))
-            {
+            // if (CheckCollision(newPos, modelo, position, scale))
+            // {
                 camera.Position = newPos;
                 stepSound.pause();
                 stepSound.play();
-            }
-            else if (indice != 2 && indice != 3 && indice != 5)
-            {
-                resolveCollision(camera, modelo, position, scale);
-            }
+            // }
+            // else if (indice != 2 && indice != 3 && indice != 5)
+            // {
+            //     resolveCollision(camera, modelo, position, scale);
+            // }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
             glm::vec3 right = camera.Right;
             glm::vec3 newPos = camera.Position + right * camera.MovementSpeed * deltaTime;
-            if (CheckCollision(newPos, modelo, position, scale))
-            {
+            // if (CheckCollision(newPos, modelo, position, scale))
+            // {
                 camera.Position = newPos;
                 stepSound.pause();
                 stepSound.play();
-            }
-            else if (indice != 2 && indice != 3 && indice != 5)
-            {
-                resolveCollision(camera, modelo, position, scale);
-            }
+            // }
+            // else if (indice != 2 && indice != 3 && indice != 5)
+            // {
+            //     resolveCollision(camera, modelo, position, scale);
+            // }
         }
     }
 
