@@ -97,6 +97,16 @@ int handleInput(sf::RenderWindow &window, Menu &menu, bool &showCredits, bool &f
                         return (4);
                         break;
                     case 4:
+                        if(!first) {
+                            window.popGLStates();
+                            }
+                        else
+                        {
+                            first = false;
+                        }
+                        return (5);
+                        break;
+                    case 5:
                         showCredits = true;
                         return 0;
                     default:

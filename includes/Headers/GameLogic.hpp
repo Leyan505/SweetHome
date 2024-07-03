@@ -20,7 +20,7 @@ const unsigned int SCR_WIDTH = desktopMode.width;
 const unsigned int SCR_HEIGHT = desktopMode.height;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, -16.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -50,8 +50,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
     {
         camera.Position.y = 0.0f;
     }
-
-    // std::cout << glm::to_string(camera.Position) << std::endl;
+    std::cout << glm::to_string(camera.Position) << std::endl;
     if (mode == 1)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -83,7 +82,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
@@ -98,7 +97,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
@@ -113,7 +112,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
     }
     else
@@ -131,7 +130,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
@@ -146,7 +145,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
@@ -176,7 +175,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
     }
 

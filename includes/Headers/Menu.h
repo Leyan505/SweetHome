@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define MAX_NUMBER_OPTIONS 5
+#define MAX_NUMBER_OPTIONS 6
 
 class Menu {
 public:
@@ -18,4 +18,3 @@ private:
     sf::Font font;
     sf::Text option[MAX_NUMBER_OPTIONS];
 };
-

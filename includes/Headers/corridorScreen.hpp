@@ -150,6 +150,8 @@ int corridorScreen::Run(sf::RenderWindow &App)
 
     srand((unsigned) time(NULL)); 
 
+    camera.Position = glm::vec3(0.0f, 0.0f, -16.0f);
+
     bool Running = true;
 
 	while (Running)

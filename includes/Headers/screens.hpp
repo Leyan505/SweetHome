@@ -10,5 +10,6 @@
 #include "kitchenScreen.hpp"
 #include "bedRoomScreen.hpp"
 #include "corridorScreen.hpp"
+#include "houseScreen.hpp"
 
 #endif // SCREENS_HPP_INCLUDED

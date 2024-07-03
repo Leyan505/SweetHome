@@ -45,6 +45,8 @@ int main(int argc, char** argv)
 	Screens.push_back(&s3);
 	corridorScreen s4;
 	Screens.push_back(&s4);
+	houseScreen s5;
+	Screens.push_back(&s5);
 
 	//Main loop
 	while (screen >= 0)
