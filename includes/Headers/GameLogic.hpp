@@ -46,7 +46,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
         camera.Position.y = 40.0f;
         camera.MovementSpeed = 30.0f;
     }
-    else
+    else if(indice != 5)
     {
         camera.Position.y = 0.0f;
     }
@@ -82,7 +82,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }*/
+            }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
@@ -97,7 +97,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }*/
+            }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
@@ -112,7 +112,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }*/
+            }
         }
     }
     else
@@ -130,7 +130,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }*/
+            }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
@@ -145,7 +145,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }*/
+            }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
@@ -175,7 +175,7 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
             else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }*/
+            }
         }
     }
 
