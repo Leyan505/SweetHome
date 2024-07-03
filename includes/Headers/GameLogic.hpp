@@ -46,6 +46,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
         camera.Position.y = 40.0f;
         camera.MovementSpeed = 30.0f;
     }
+    else if(indice==4){
+        camera.Position.y = 0.0f;
+        camera.MovementSpeed = 3.0f;
+    }
     else if(indice != 5)
     {
         camera.Position.y = 0.0f;
