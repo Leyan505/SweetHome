@@ -18,7 +18,7 @@ public:
         creditsText.setFont(font);
         creditsText.setFillColor(sf::Color::White);
         creditsText.setCharacterSize(50); // Tamaño de letra más grande
-        creditsText.setString("Desarrollado por:\n\nJose Andres Guido Escobar\nEloisse Francesca Molina Camacho\nJorge Isaac Lopez Aragon\nLia Carely Cruz Mendoza");
+        creditsText.setString("Developed by:\n\nJose Andres Guido Escobar\nEloisse Francesca Molina Camacho\nJorge Isaac Lopez Aragon\nLia Carely Cruz Mendoza");
 
         // Centrar el texto
         sf::FloatRect textRect = creditsText.getLocalBounds();

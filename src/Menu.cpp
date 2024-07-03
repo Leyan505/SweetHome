@@ -17,11 +17,11 @@ Menu::Menu(float width, float height) {
     }
 
     // Nombres de las opciones del menú
-    option[0].setString("Sala");
-    option[1].setString("Cocina");
-    option[2].setString("Habitacion");
-    option[3].setString("Pasillo");
-    option[4].setString("Creditos");
+    option[0].setString("Living room");
+    option[1].setString("Kitchen");
+    option[2].setString("Bedroom");
+    option[3].setString("Hallway");
+    option[4].setString("Credits");
 
     selectedOpt = 0;
     option[selectedOpt].setFillColor(sf::Color::Yellow); // Opción seleccionada en amarillo

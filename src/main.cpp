@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 	int screen = 0;
 
 	//Window creation
-	sf::RenderWindow App(desktopMode, "SweetHome", sf::Style::Default, sf::ContextSettings(24));
+	sf::RenderWindow App(desktopMode, "SweetHome", sf::Style::Fullscreen, sf::ContextSettings(24));
     App.setFramerateLimit(165);
     App.setActive(true);
     App.setMouseCursorGrabbed(true);
