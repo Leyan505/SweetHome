@@ -64,13 +64,13 @@
 SweetHome is a 3D environment heavily inspired by the movie coraline. It contains four rooms, with a view of the exterior of the house:
 * Living room
 * Kitchen
-<img src="readme/kitchen.png" alt="kitchen" width="1280" height="720">
+  <img src="readme/kitchen.png" alt="kitchen" width="1280" height="720">
 * Bedroom
 * Hallway
-<img src="readme/hallway1.png" alt="hallway1" width="1280" height="720">
-<img src="readme/hallway2.png" alt="hallway2" width="1280" height="720">
+  <img src="readme/hallway1.png" alt="hallway1" width="1280" height="720">
+  <img src="readme/hallway2.png" alt="hallway2" width="1280" height="720">
 * House
-<img src="readme/house.png" alt="house" width="1280" height="720">
+  <img src="readme/house.png" alt="house" width="1280" height="720">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -78,14 +78,9 @@ SweetHome is a 3D environment heavily inspired by the movie coraline. It contain
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+* [![CMake][CMake]][CMake-url]
+* [![OpenGL][OpenGL]][OpenGL-url]
+* [![SFML][SFML]][SFML-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -94,21 +89,34 @@ SweetHome is a 3D environment heavily inspired by the movie coraline. It contain
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+In order to run it, CMake has to be installed. Due to the nature of the project and the use of static and dynamic libraries imported with the project, there is no need for any other dependencies.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+It is inferred that you already have a C++ compiler, MSVC compiler 2019 or newer is prefered.
+
+#### Windows
+
+* CMake
   ```sh
-  npm install npm@latest -g
+  winget install kitware.cmake
   ```
+* Make
+  ```sh
+  winget install ezwinports.make
+  ```
+You also need to add C:\Program Files (x86)\GnuWin32\bin to the windows PATH environment variable. You can also use NINJA instead.
+
+#### Linux (Fedora)
+
+```
+  sudo dnf install cmake
+```
+
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/github_username/repo_name.git
    ```
@@ -207,4 +215,12 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [forks-url]: https://github.com/Leyan505/SweetHome/network/members
 [stars-shield]: https://img.shields.io/github/stars/Leyan505/SweetHome.svg?style=for-the-badge
 [stars-url]: https://github.com/Leyan505/SweetHome/stargazers
+
+[CMake]: https://img.shields.io/badge/CMake-3.5-CCCCCD?logo=CMake
+[CMake-url]: https://cmake.org/
+[OpenGL]: https://img.shields.io/badge/-OpenGL-5586A4?style=flat&logo=opengl&logoColor=white
+[OpenGL-url]: https://opengl.org/
+[SFML]: https://img.shields.io/badge/-SFML-8CC445?style=flat&logo=sfml&logoColor=white
+[SFML-url]: https://sfml-dev.org/
+
 
