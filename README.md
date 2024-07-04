@@ -195,6 +195,5 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [SFML-url]: https://sfml-dev.org/
 
 ## Video Demo
-[Sweet Home Demo-url]: https://youtu.be/YGKOGz-7ubo
-
+https://youtu.be/YGKOGz-7ubo
 
