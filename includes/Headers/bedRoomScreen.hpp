@@ -207,11 +207,11 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
             // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
         lightingShader.setVec3("viewPos", camera.Position);
-        lightingShader.setFloat("material.shininess", 40.0f);
+        lightingShader.setFloat("material.shininess", 32.0f);
 
-        lightingShader.setVec3("dirLight.direction", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
         // iluminacion del ambiente, todos los objetos lo tienen
-        lightingShader.setVec3("dirLight.ambient", 5.0f, 5.0f, 5.0f);
+        lightingShader.setVec3("dirLight.ambient", 1.0f, 1.0f, 1.0f);
         // iluminacion donde si tiene el objeto
         lightingShader.setVec3("dirLight.diffuse", 0.04f, 0.04f, 0.04f);
         lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
@@ -219,12 +219,12 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
 
         lightingShader.setVec3("pointLights[" + std::to_string(0) + "].position", pointLightPositions[0]);
         // cambio de color tercero de ambiente y diffuse
-        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].ambient", 1.1f, 1.1f, 1.1f);
-        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].diffuse", 1.0f, 1.0f, 1.1f);
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].ambient", 0.5f, 0.5f, 0.5f);
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].diffuse", 1.0f, 1.0f, 1.0f);
         lightingShader.setVec3("pointLights[" + std::to_string(0) + "].specular", 1.0f, 1.0f, 1.0f);
         lightingShader.setFloat("pointLights[" + std::to_string(0) + "].constant", 1.0f);
-        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].linear", 0.014f);
-        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].quadratic", 0.0007f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].linear", 0.022f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].quadratic", 0.0019f);
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 2000.0f);
         glm::mat4 view = camera.GetViewMatrix();
@@ -233,6 +233,10 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
         // world transformation
         glm::mat4 model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
+        // also draw the lamp object(s)
+        lightCubeShader.use();
+        lightCubeShader.setMat4("projection", projection);
+        lightCubeShader.setMat4("view", view);
 
         // we now draw as many light bulbs as we have point lights.
         glBindVertexArray(lightCubeVAO);
@@ -245,17 +249,13 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        // also draw the lamp object(s)
-        lightCubeShader.use();
-        lightCubeShader.setMat4("projection", projection);
-        lightCubeShader.setMat4("view", view);
 
     
           //  glm::mat4 model = glm::mat4(1.0f);
             lightingShader.use();
             model = glm::mat4(1.0f);
-            model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
-            model = glm::scale(model, maeScale);   // it's a bit too big for our scene, so scale it down
+            model = glm::translate(model, WoodPos); // translate it down so it's at the center of the scene
+            model = glm::scale(model, WoodScale);   // it's a bit too big for our scene, so scale it down
             lightingShader.setMat4("model", model);
             Bed_Wood.Draw(lightingShader);
 
