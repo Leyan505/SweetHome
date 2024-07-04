@@ -63,7 +63,7 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
     sf::Clock clock;
 
     sf::Music music;
-    if(!music.openFromFile(FileSystem::getPath("resources/audio/explorationCoraline.mp3")))
+    if(!music.openFromFile(FileSystem::getPath("resources/audio/living.mp3")))
         return 1;
     music.setVolume(25.0f);
     music.setLoop(true);
@@ -78,7 +78,7 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
 
     srand((unsigned) time(NULL)); 
 
-    camera.Position = glm::vec3(-6.0f, 5.0f, -1.0f);
+    camera.Position = glm::vec3(0.0f, 0.0f, 0.0f);
 
     bool Running = true;
 
@@ -117,16 +117,16 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
            by using 'Uniform buffer objects', but that is something we'll discuss in the 'Advanced GLSL' tutorial.
         */
         lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-        lightingShader.setVec3("dirLight.ambient", 0.5f, 0.5f, 0.5f);
+        lightingShader.setVec3("dirLight.ambient", 0.1f, 0.25f, 0.2f); // Tono turquesa
         lightingShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
         lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
         for (int i = 0; i < (sizeof(pointLightPositions)/sizeof(glm::vec3))-1; i++)
         {
             // Cambiar colores de la iluminación
             lightingShader.setVec3("pointLights["+ std::to_string(i) +"].position", pointLightPositions[i]);
-            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].ambient", 0.2f, 0.2f, 0.2f);
-            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].diffuse", 0.3f, 0.3f, 0.5f);
-            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].specular", 1.0f, 1.0f, 1.0f);
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].ambient", 0.1f, 0.1f, 0.5f); // Tono azul
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].diffuse", 0.2f, 0.2f, 0.5f); // Tono azul
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].specular", 0.5f, 0.5f, 1.0f); // Tono azul
             lightingShader.setFloat("pointLights["+ std::to_string(i) +"].constant", 1.0f);
             lightingShader.setFloat("pointLights["+ std::to_string(i) +"].linear", 0.14f);
             lightingShader.setFloat("pointLights["+ std::to_string(i) +"].quadratic", 0.07f);
