@@ -13,22 +13,16 @@
 <br />
 <div align="center">
   <a href="https://github.com/Leyan505/SweetHome">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="readme/logo.png" alt="Logo" width="120" height="120">
   </a>
 
 <h3 align="center">SweetHome</h3>
 
   <p align="center">
-    project_description
+    Coraline’s house inspired 3D environment
     <br />
-    <a href="https://github.com/Leyan505/SweetHome"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Leyan505/SweetHome"><strong>Explore the repo »</strong></a>
     <br />
-    <br />
-    <a href="https://github.com/Leyan505/SweetHome">View Demo</a>
-    ·
-    <a href="https://github.com/Leyan505/SweetHome/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    ·
-    <a href="https://github.com/Leyan505/SweetHome/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -65,9 +59,18 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img src="readme/Menu.png" alt="menu" width="1280" height="720">
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+SweetHome is a 3D environment heavily inspired by the movie coraline. It contains four rooms, with a view of the exterior of the house:
+* Living room
+* Kitchen
+<img src="readme/kitchen.png" alt="kitchen" width="1280" height="720">
+* Bedroom
+* Hallway
+<img src="readme/hallway1.png" alt="hallway1" width="1280" height="720">
+<img src="readme/hallway2.png" alt="hallway2" width="1280" height="720">
+* House
+<img src="readme/house.png" alt="house" width="1280" height="720">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
