@@ -26,7 +26,7 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
 
     Model corridor(FileSystem::getPath("resources/objects/living-room/scene.gltf"));
 
-    Shader lightingShader("lighting.vs", "lighting.fs");
+    Shader lightingShader("lighting_living.vs", "lighting_living.fs");
     Shader lightCubeShader("light_cube.vs", "light_cube.fs");
     Shader skyboxShader("skybox.vs", "skybox.fs");
 
@@ -79,13 +79,9 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
 
     // positions of the point lights
     glm::vec3 pointLightPositions[] = {
-        glm::vec3( 0.85f,  0.74f,  -7.93f),
-        glm::vec3( -1.09f, 0.74f, -4.70f),
-        glm::vec3(0.85f,  0.74f, -0.25f),
-        glm::vec3( -1.09f,  0.74f, 4.16f),
-        glm::vec3( 0.85f,  0.74f, 8.80f),
-        glm::vec3( -0.09f,  0.74f, -16.98f),
-        glm::vec3( -0.09f,  0.0f, 18.63f)
+        glm::vec3( -0.4,  11.18f,  -4.23f),
+        glm::vec3( -16.13f, 8.16f, 7.93f),
+        glm::vec3( -12.40f,  2.64f, -8.67f)
     };
 
     // skybox VAO
@@ -199,8 +195,8 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
         {
             // Cambiar colores de la iluminación
             lightingShader.setVec3("pointLights["+ std::to_string(i) +"].position", pointLightPositions[i]);
-            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].ambient", 0.1f, 0.1f, 0.5f); // Tono azul
-            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].diffuse", 0.2f, 0.2f, 0.5f); // Tono azul
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].ambient", 0.4f, 1.0f, 0.5f); // Tono azul
+            lightingShader.setVec3("pointLights["+ std::to_string(i) +"].diffuse", 0.2f, 1.0f, 0.5f); // Tono azul
             lightingShader.setVec3("pointLights["+ std::to_string(i) +"].specular", 0.5f, 0.5f, 1.0f); // Tono azul
             lightingShader.setFloat("pointLights["+ std::to_string(i) +"].constant", 1.0f);
             lightingShader.setFloat("pointLights["+ std::to_string(i) +"].linear", 0.14f);
@@ -209,12 +205,12 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
         
         lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].position", pointLightPositions[sizeof(pointLightPositions)/sizeof(glm::vec3)-1]);
         float random = (rand()) / static_cast <float> (RAND_MAX);
-        lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].ambient", 0.02f, 0.03f, random);
-        lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].diffuse", 0.3f, 0.3f, 0.5f);
+        lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].ambient", 0.0f, 0.0f, random);
+        lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].diffuse", 0.0f, 0.0f, 1.0f);
         lightingShader.setVec3("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].specular", 1.0f, 1.0f, 1.0f);
         lightingShader.setFloat("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].constant", 1.0f);
-        lightingShader.setFloat("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].linear", 0.14f);
-        lightingShader.setFloat("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].quadratic", 0.07f);
+        lightingShader.setFloat("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].linear", 0.045f);
+        lightingShader.setFloat("pointLights["+ std::to_string(sizeof(pointLightPositions)/sizeof(glm::vec3)-1) +"].quadratic", 0.0075f);
 
         // spotLight
         lightingShader.setVec3("spotLight.position", camera.Position);
