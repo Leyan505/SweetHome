@@ -48,8 +48,8 @@ int kitchenScreen::Run(sf::RenderWindow &App)
     // positions of the point lights
     glm::vec3 pointLightPositions[] = {
         glm::vec3(3.85f, 11.0f, 17.5f),
-        glm::vec3(-55.15f, 4.0f, -27.6f)
-        };
+        glm::vec3(-64.80f, 3.5f, 31.52f),
+        glm::vec3(38.76f, -9.63f, -41.54f)};
 
     float vertices[] = {
         // positions          // normals           // texture coords
@@ -108,9 +108,8 @@ int kitchenScreen::Run(sf::RenderWindow &App)
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     // note that we update the lamp's position attribute's stride to reflect the updated buffer data
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-    
 
     // shader configuration
     // --------------------
@@ -174,7 +173,7 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         glm::vec3 tablePos = glm::vec3(-4.0f, 0.0f, 26.0f);
         glm::vec3 tableScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-        glm::vec3 tablePos2 = glm::vec3(-49.0f, 0.0f, 27.0f);
+        glm::vec3 tablePos2 = glm::vec3(-68.0f, 0.0f, 33.0f);
         glm::vec3 tableScale2 = glm::vec3(1.0f, 1.0f, 1.0f);
 
         glm::vec3 cakePos = glm::vec3(-4.0f, 0.0f, 25.0f);
@@ -256,25 +255,43 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
         lightingShader.setVec3("viewPos", camera.Position);
-        lightingShader.setFloat("material.shininess", 32.0f);
+        lightingShader.setFloat("material.shininess", 40.0f);
 
         lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-        //iluminacion del ambiente, todos los objetos lo tienen
-        lightingShader.setVec3("dirLight.ambient", 0.01f, 0.01f, 0.01f);
-        //iluminacion donde si tiene el objeto
+        // iluminacion del ambiente, todos los objetos lo tienen
+        lightingShader.setVec3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
+        // iluminacion donde si tiene el objeto
         lightingShader.setVec3("dirLight.diffuse", 0.04f, 0.04f, 0.04f);
         lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
-        for (int i = 0; i < (sizeof(pointLightPositions) / sizeof(glm::vec3)); i++)
-        {
-            lightingShader.setVec3("pointLights[" + std::to_string(i) + "].position", pointLightPositions[i]);
-            //cambio de color tercero de ambiente y diffuse
-            lightingShader.setVec3("pointLights[" + std::to_string(i) + "].ambient", 1.0f, 1.0f, 1.0f);
-            lightingShader.setVec3("pointLights[" + std::to_string(i) + "].diffuse", 1.0f, 1.0f, 0.0f);
-            lightingShader.setVec3("pointLights[" + std::to_string(i) + "].specular", 1.0f, 1.0f, 1.0f);
-            lightingShader.setFloat("pointLights[" + std::to_string(i) + "].constant", 1.0f);
-            lightingShader.setFloat("pointLights[" + std::to_string(i) + "].linear", 0.014f);
-            lightingShader.setFloat("pointLights[" + std::to_string(i) + "].quadratic", 0.0007f);
-        }
+       
+
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].position", pointLightPositions[0]);
+        // cambio de color tercero de ambiente y diffuse
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].ambient", 1.1f, 1.1f, 1.1f);
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].diffuse", 1.0f, 1.0f, 1.1f);
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].constant", 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].linear", 0.014f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].quadratic", 0.0007f);
+
+        lightingShader.setVec3("pointLights[" + std::to_string(1) + "].position", pointLightPositions[1]);
+        // cambio de color tercero de ambiente y diffuse
+        lightingShader.setVec3("pointLights[" + std::to_string(1) + "].ambient", 0.8f, 0.8f, 0.8f);
+        lightingShader.setVec3("pointLights[" + std::to_string(1) + "].diffuse", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("pointLights[" + std::to_string(1) + "].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(1) + "].constant", 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(1) + "].linear", 0.022f);
+        lightingShader.setFloat("pointLights[" + std::to_string(1) + "].quadratic", 0.0019f);
+
+        lightingShader.setVec3("pointLights[" + std::to_string(2) + "].position", pointLightPositions[2]);
+        // cambio de color tercero de ambiente y diffuse
+        lightingShader.setVec3("pointLights[" + std::to_string(2) + "].ambient", 1.1f, 1.1f, 1.1f);
+        lightingShader.setVec3("pointLights[" + std::to_string(2) + "].diffuse", 1.0f, 1.0f, 1.1f);
+        lightingShader.setVec3("pointLights[" + std::to_string(2) + "].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(2) + "].constant", 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(2) + "].linear", 0.007f);
+        lightingShader.setFloat("pointLights[" + std::to_string(2) + "].quadratic", 0.0002f);
+
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 2000.0f);
         glm::mat4 view = camera.GetViewMatrix();
