@@ -57,7 +57,7 @@
 ## About The Project
 
 
-SweetHome is a 3D environment heavily inspired by the movie coraline. It contains four rooms, with a view of the exterior of the house. Each room has it's own unique touch, it's unique soundtrack and easter eggs to provide an inmersive experience. This project is made for the purpose of learning openGL and to let creativity take the driver's seat.
+SweetHome is a 3D environment heavily inspired by the movie coraline. It contains four rooms, with a view of the exterior of the house. Each room has it's own unique touch, it's unique soundtrack and easter eggs to provide an immersive experience. This project is made for the purpose of learning openGL and to let creativity take the driver's seat.
 
 <img src="readme/Menu.png" alt="menu" width="720" height="480">
 
@@ -82,7 +82,7 @@ In order to run it, CMake has to be installed. Due to the nature of the project 
 
 ### Prerequisites
 
-It is inferred that you already have a C++ compiler, MSVC compiler 2019 or newer is prefered.
+It is inferred that you already have a C++ compiler, MSVC compiler 2019 or newer is preferred.
 
 #### Windows
 
