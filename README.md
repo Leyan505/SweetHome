@@ -46,10 +46,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
@@ -59,18 +56,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="readme/Menu.png" alt="menu" width="1280" height="720">
 
-SweetHome is a 3D environment heavily inspired by the movie coraline. It contains four rooms, with a view of the exterior of the house:
-* Living room
-* Kitchen
-  <img src="readme/kitchen.png" alt="kitchen" width="1280" height="720">
-* Bedroom
-* Hallway
-  <img src="readme/hallway1.png" alt="hallway1" width="1280" height="720">
-  <img src="readme/hallway2.png" alt="hallway2" width="1280" height="720">
-* House
-  <img src="readme/house.png" alt="house" width="1280" height="720">
+SweetHome is a 3D environment heavily inspired by the movie coraline. It contains four rooms, with a view of the exterior of the house. Each room has it's own unique touch, it's unique soundtrack and easter eggs to provide an inmersive experience. This project is made for the purpose of learning openGL and to let creativity take the driver's seat.
+
+<img src="readme/Menu.png" alt="menu" width="720" height="480">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -105,7 +94,7 @@ It is inferred that you already have a C++ compiler, MSVC compiler 2019 or newer
   ```sh
   winget install ezwinports.make
   ```
-You also need to add C:\Program Files (x86)\GnuWin32\bin to the windows PATH environment variable. You can also use NINJA instead.
+You also need to add ```C:\Program Files (x86)\GnuWin32\bin``` to the windows PATH environment variable. You can also use NINJA instead.
 
 #### Linux (Fedora)
 
@@ -118,15 +107,16 @@ You also need to add C:\Program Files (x86)\GnuWin32\bin to the windows PATH env
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/Leyan505/SweetHome.git
    ```
-3. Install NPM packages
+2. Configure CMake
    ```sh
-   npm install
+   cmake CMakeLists.txt
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. Run the executable on the bin folder
+   ```
+   cd bin
+   ./main.exe
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -136,46 +126,24 @@ You also need to add C:\Program Files (x86)\GnuWin32\bin to the windows PATH env
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+* Living room
 
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/Leyan505/SweetHome/issues) for a full list of proposed features (and known issues).
+* Kitchen
+  <img src="readme/kitchen.png" alt="kitchen" width="1280" height="720">
+* Bedroom
+  
+* Hallway
+  
+  <img src="readme/hallway1.png" alt="hallway1" width="1280" height="720">
+  <img src="readme/hallway2.png" alt="hallway2" width="1280" height="720">
+  
+* House
+  <img src="readme/house.png" alt="house" width="1280" height="720">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
+ 
 <!-- LICENSE -->
 ## License
 
@@ -185,23 +153,12 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 
 
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/Leyan505/SweetHome)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [LearnOpenGL](https://learnopengl.com/)
+* [SFML WIKI](https://github.com/SFML/SFML/wiki)
+* [Khronos Registry](https://registry.khronos.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
