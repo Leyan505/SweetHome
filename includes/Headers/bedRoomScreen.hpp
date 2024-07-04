@@ -24,11 +24,83 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
 
     // build and compile shaders
     // -------------------------
-    Shader ourShader("1.model_loading.vs", "1.model_loading.fs");
     // load the main model of Bedroom
     Model Bedroom(FileSystem::getPath("Resources/Objects/BED-ROOM/BED-BedRoom.gltf"));
     // only load  the woods models for the collision
     Model Bed_Wood(FileSystem::getPath("Resources/Objects/ROOM-BED/ROOM-BED.gltf"));
+     // shaders de luz
+    Shader lightingShader("lightingBed.vs", "lightingBed.fs");
+    Shader lightCubeShader("light_cube.vs", "light_cube.fs");
+
+    // positions of the point lights
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3(0.0f, 0.0f, 0.0f)};
+
+    float vertices[] = {
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+    // first, configure the cube's VAO (and VBO)
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
+    unsigned int lightCubeVAO;
+    glGenVertexArrays(1, &lightCubeVAO);
+    glBindVertexArray(lightCubeVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // note that we update the lamp's position attribute's stride to reflect the updated buffer data
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    // shader configuration
+    // --------------------
+    lightingShader.use();
+    lightingShader.setInt("material.diffuse", 0);
+    lightingShader.setInt("material.specular", 1);
 
     sf::Clock clock;
 
@@ -45,16 +117,16 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
     //Time beetween sound  (seconds)
     float timeBetweenSounds = 20.0f; // main music
 
-    sf::sleep(sf::seconds(timeBetweenSounds));
+    // sf::sleep(sf::seconds(timeBetweenSounds));
 
-    if (!music2.openFromFile(FileSystem::getPath("resources/audio/MothersWhistle.mp3")))
-        return -1;
-    music2.setPosition(0, 1, 10);
-    music2.setVolume(70.0f); // adjust the volume
-    music2.setLoop(true);
-    music2.play();
-    //sf::sleep(sf::seconds(timeBetweenSounds));
-    music2.stop();
+    // if (!music2.openFromFile(FileSystem::getPath("resources/audio/MothersWhistle.mp3")))
+    //     return -1;
+    // music2.setPosition(0, 1, 10);
+    // music2.setVolume(70.0f); // adjust the volume
+    // music2.setLoop(true);
+    // music2.play();
+    // //sf::sleep(sf::seconds(timeBetweenSounds));
+    // music2.stop();
 
     // sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
     // if (!music3.openFromFile(FileSystem::getPath("resources/audio/motherschatting.mp3")))
@@ -83,26 +155,7 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
     //     (FileSystem::getPath("resources/audio/FathersSong.mp3")),
     //     (FileSystem::getPath("resources/audio/welcomeHome.mp3"))};
 
-    // std::vector<sf::Music> musics;
-
-    // // Cargar cada música en el vector musics
-    // for (const auto &file : musicFiles)
-    // {
-    //     sf::Music music;
-    //     if (!music.openFromFile(file))
-    //     {
-    //         std::cerr << "Error al cargar el archivo: " << file << std::endl;
-    //         continue; // O maneja el error de alguna otra manera
-    //     }
-    //     music.setVolume(15.0f);
-    //     music.setLoop(true);
-    //     musics.push_back(music);
-    //     sf::sleep(sf::seconds(timeBetweenSounds));
-    // }
-    // if (!musics.empty())
-    //     musics[0].play(); // Reproducir la primera música del vector
-
-    // Main Loop
+   
     while (true)
     {
         sf::SoundBuffer buffer;
@@ -151,34 +204,67 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
 
             glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader.use();
+        lightingShader.setVec3("viewPos", camera.Position);
+        lightingShader.setFloat("material.shininess", 40.0f);
 
-            // don't forget to enable shader before setting uniforms
-            ourShader.use();
-            // view/projection transformations
-            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 200000.0f);
-            glm::mat4 view = camera.GetViewMatrix();
-            ourShader.setMat4("projection", projection);
-            ourShader.setMat4("view", view);
+        lightingShader.setVec3("dirLight.direction", 1.0f, 1.0f, 1.0f);
+        // iluminacion del ambiente, todos los objetos lo tienen
+        lightingShader.setVec3("dirLight.ambient", 5.0f, 5.0f, 5.0f);
+        // iluminacion donde si tiene el objeto
+        lightingShader.setVec3("dirLight.diffuse", 0.04f, 0.04f, 0.04f);
+        lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+       
 
-            // render the loaded model
-            // glm::mat4 model = glm::mat4(1.0f);
-            // model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
-            // model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-            // ourShader.setMat4("model", model);
-            // chili.Draw(ourShader);
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].position", pointLightPositions[0]);
+        // cambio de color tercero de ambiente y diffuse
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].ambient", 1.1f, 1.1f, 1.1f);
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].diffuse", 1.0f, 1.0f, 1.1f);
+        lightingShader.setVec3("pointLights[" + std::to_string(0) + "].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].constant", 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].linear", 0.014f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].quadratic", 0.0007f);
 
-            glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 2000.0f);
+        glm::mat4 view = camera.GetViewMatrix();
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setMat4("view", view);
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        lightingShader.setMat4("model", model);
+
+        // we now draw as many light bulbs as we have point lights.
+        glBindVertexArray(lightCubeVAO);
+        for (unsigned int i = 0; i < sizeof(pointLightPositions) / sizeof(glm::vec3); i++)
+        {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, pointLightPositions[i]);
+            model = glm::scale(model, glm::vec3(1.0f)); // Make it a smaller cube
+            lightCubeShader.setMat4("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
+        // also draw the lamp object(s)
+        lightCubeShader.use();
+        lightCubeShader.setMat4("projection", projection);
+        lightCubeShader.setMat4("view", view);
+
+    
+          //  glm::mat4 model = glm::mat4(1.0f);
+            lightingShader.use();
             model = glm::mat4(1.0f);
             model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
             model = glm::scale(model, maeScale);   // it's a bit too big for our scene, so scale it down
-            ourShader.setMat4("model", model);
-            Bed_Wood.Draw(ourShader);
+            lightingShader.setMat4("model", model);
+            Bed_Wood.Draw(lightingShader);
 
+            lightingShader.use();
             model = glm::mat4(1.0f);
             model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
             model = glm::scale(model, maeScale);   // it's a bit too big for our scene, so scale it down
-            ourShader.setMat4("model", model);
-            Bedroom.Draw(ourShader);
+            lightingShader.setMat4("model", model);
+            Bedroom.Draw(lightingShader);
             App.display();
 
             sf::Event event;
