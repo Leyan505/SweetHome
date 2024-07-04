@@ -121,6 +121,7 @@ int kitchenScreen::Run(sf::RenderWindow &App)
 
     sf::Music music;
     sf::Music door_sound;
+    sf::Music cake_sound;
 
     if (!music.openFromFile(FileSystem::getPath("resources/audio/end_credits.mp3")))
         return -1;
@@ -132,6 +133,12 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         return -1;
     door_sound.setVolume(90.0f);
     door_sound.setLoop(true);
+    // door_sound.play();
+
+     if (!cake_sound.openFromFile(FileSystem::getPath("resources/audio/coraline_cake.mp3")))
+        return -1;
+    cake_sound.setVolume(90.0f);
+    cake_sound.setLoop(true);
     // door_sound.play();
 
     sf::SoundBuffer buffer;
@@ -204,6 +211,8 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         {
             Running = processInput(App, table, 1, stepSound, 2, tablePos, tableScale);
             std::cout << "¡Colision detectada!" << std::endl;
+            cake_sound.pause();
+            cake_sound.play();
         }
         else if (CheckCollision(camera, cake, cakePos, cakeScale))
         {
@@ -240,6 +249,7 @@ int kitchenScreen::Run(sf::RenderWindow &App)
             //     // input
             //     // -----
             door_sound.pause();
+            cake_sound.pause();
             Running = processInput(App, kitchen, 0, stepSound, 2, kitchenPos, kitchenScale);
         }
         if (!Running)
@@ -289,8 +299,8 @@ int kitchenScreen::Run(sf::RenderWindow &App)
         lightingShader.setVec3("pointLights[" + std::to_string(2) + "].diffuse", 1.0f, 1.0f, 1.1f);
         lightingShader.setVec3("pointLights[" + std::to_string(2) + "].specular", 1.0f, 1.0f, 1.0f);
         lightingShader.setFloat("pointLights[" + std::to_string(2) + "].constant", 1.0f);
-        lightingShader.setFloat("pointLights[" + std::to_string(2) + "].linear", 0.007f);
-        lightingShader.setFloat("pointLights[" + std::to_string(2) + "].quadratic", 0.0002f);
+        lightingShader.setFloat("pointLights[" + std::to_string(2) + "].linear", 0.014f);
+        lightingShader.setFloat("pointLights[" + std::to_string(2) + "].quadratic", 0.0007f);
 
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 2000.0f);
