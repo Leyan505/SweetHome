@@ -62,12 +62,12 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
 
     sf::Clock clock;
 
-    // sf::Music music;
-    // if(!music.openFromFile(FileSystem::getPath("resources/audio/explorationCoraline.mp3")))
-    //     return 1;
-    // music.setVolume(25.0f);
-    // music.setLoop(true);
-    // music.play();
+    sf::Music music;
+    if(!music.openFromFile(FileSystem::getPath("resources/audio/explorationCoraline.mp3")))
+        return 1;
+    music.setVolume(25.0f);
+    music.setLoop(true);
+    music.play();
 
     sf::SoundBuffer buffer;
     if(!buffer.loadFromFile(FileSystem::getPath("resources/audio/step.mp3")))
@@ -78,7 +78,7 @@ int livingRoomScreen::Run(sf::RenderWindow &App)
 
     srand((unsigned) time(NULL)); 
 
-    camera.Position = glm::vec3(0.0f, -10.0f, -1.0f);
+    camera.Position = glm::vec3(-6.0f, 5.0f, -1.0f);
 
     bool Running = true;
 

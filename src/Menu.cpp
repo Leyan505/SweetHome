@@ -26,10 +26,16 @@ Menu::Menu(float width, float height) {
 
     selectedOpt = 0;
     option[selectedOpt].setFillColor(sf::Color::Yellow); // Opción seleccionada en amarillo
+    selectSound = nullptr; // Inicializar el puntero de sonido
 }
 
 // Constructor por defecto
 Menu::Menu() : Menu(800, 600) {}
+
+// Función para establecer el sonido de selección
+void Menu::setSelectSound(sf::Sound &sound) {
+    selectSound = &sound;
+}
 
 // Función para dibujar el menú
 void Menu::draw(sf::RenderWindow &window) {
@@ -44,6 +50,9 @@ void Menu::moveUp() {
         option[selectedOpt].setFillColor(sf::Color::White);
         selectedOpt--;
         option[selectedOpt].setFillColor(sf::Color::Yellow);
+        if (selectSound) {
+            selectSound->play();
+        }
     }
 }
 
@@ -53,6 +62,9 @@ void Menu::moveDown() {
         option[selectedOpt].setFillColor(sf::Color::White);
         selectedOpt++;
         option[selectedOpt].setFillColor(sf::Color::Yellow);
+        if (selectSound) {
+            selectSound->play();
+        }
     }
 }
 

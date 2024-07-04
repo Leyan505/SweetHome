@@ -1,6 +1,7 @@
 #include <Headers/Menu.h> // Asegúrate de que Menu.h esté en el directorio correcto
 #include "cScreen.hpp"
 #include <filesystem.h>
+#include <SFML/Audio.hpp>
 
 // Clase para manejar la pantalla de créditos
 class CreditsScreen {
@@ -16,7 +17,7 @@ public:
         creditsText.setFont(font);
         creditsText.setFillColor(sf::Color::White);
         creditsText.setCharacterSize(50); // Tamaño de letra más grande
-        creditsText.setString("Desarrollado por:\n\nJose Andres Guido Escobar\nEloisse Francesca Molina Camacho\nJorge Isaac Lopez Aragon\nLia Carely Cruz Mendoza");
+        creditsText.setString("Developed by:\n\nJose Andres Guido Escobar\nEloisse Francesca Molina Camacho\nJorge Isaac Lopez Aragon\nLia Carely Cruz Mendoza");
 
         // Centrar el texto
         sf::FloatRect textRect = creditsText.getLocalBounds();
@@ -35,7 +36,6 @@ private:
     sf::Font font;
 };
 
-
 int handleInput(sf::RenderWindow &window, Menu &menu, bool &showCredits, bool &first) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -47,61 +47,50 @@ int handleInput(sf::RenderWindow &window, Menu &menu, bool &showCredits, bool &f
             if (event.key.code == sf::Keyboard::Up) {
                 menu.moveUp();
                 int selectedItem = menu.getPressedItem();
-                std::cout<<selectedItem<<std::endl;
+                std::cout << selectedItem << std::endl;
             } else if (event.key.code == sf::Keyboard::Down) {
                 menu.moveDown();
                 int selectedItem = menu.getPressedItem();
-                std::cout<<selectedItem<<std::endl;
+                std::cout << selectedItem << std::endl;
             } else if (event.key.code == sf::Keyboard::Return) {
                 int selectedItem = menu.getPressedItem();
-                switch (selectedItem)
-                {
+                switch (selectedItem) {
                     case 0:
-                        if(!first) {
+                        if (!first) {
                             window.popGLStates();
-                            }
-                        else
-                        {
+                        } else {
                             first = false;
                         }
                         return (1);
                         break;
                     case 1:
-                        if(!first) {
+                        if (!first) {
                             window.popGLStates();
-                            }
-                        else
-                        {
+                        } else {
                             first = false;
                         }
                         return (2);
                         break;
                     case 2:
-                        if(!first) {
+                        if (!first) {
                             window.popGLStates();
-                            }
-                        else
-                        {
+                        } else {
                             first = false;
                         }
                         return (3);
                         break;
                     case 3:
-                        if(!first) {
+                        if (!first) {
                             window.popGLStates();
-                            }
-                        else
-                        {
+                        } else {
                             first = false;
                         }
                         return (4);
                         break;
                     case 4:
-                        if(!first) {
+                        if (!first) {
                             window.popGLStates();
-                            }
-                        else
-                        {
+                        } else {
                             first = false;
                         }
                         return (5);
@@ -135,33 +124,49 @@ void render(sf::RenderWindow &window, Menu &menu, sf::Sprite &background, Credit
     window.display(); // Mostrar en pantalla
 }
 
-class menuScreen : public cScreen
-{
+class menuScreen : public cScreen {
 private:
-	int alpha_max;
-	int alpha_div;
-	bool playing;
+    int alpha_max;
+    int alpha_div;
+    bool playing;
     bool first;
+
 public:
-	menuScreen(void);
-	virtual int Run(sf::RenderWindow &App);
+    menuScreen(void);
+    virtual int Run(sf::RenderWindow &App);
 };
 
-menuScreen::menuScreen(void)
-{
-	alpha_max = 3 * 255;
-	alpha_div = 3;
-	playing = false;
+menuScreen::menuScreen(void) {
+    alpha_max = 3 * 255;
+    alpha_div = 3;
+    playing = false;
     first = true;
 }
 
-int menuScreen::Run(sf::RenderWindow &App)
-{
-	bool Running = true;
-	int alpha = 0;
+int menuScreen::Run(sf::RenderWindow &App) {
+    sf::Music music;
+    if (!music.openFromFile(FileSystem::getPath("Resources/audio/ghost-children.mp3"))) {
+        std::cerr << "Error loading music" << std::endl;
+        return -1;
+    }
+    music.setVolume(30.0f);
+    music.setLoop(true);
+    music.play();
 
-	// Crear el menú con las dimensiones de la ventana
+    sf::SoundBuffer selectBuffer;
+    if (!selectBuffer.loadFromFile(FileSystem::getPath("Resources/audio/select.mp3"))) {
+        std::cerr << "Error loading select sound" << std::endl;
+        return -1;
+    }
+    sf::Sound selectSound;
+    selectSound.setBuffer(selectBuffer);
+
+    bool Running = true;
+    int alpha = 0;
+
+    // Crear el menú con las dimensiones de la ventana
     Menu menu(App.getSize().x, App.getSize().y);
+    menu.setSelectSound(selectSound);
 
     // Crear la pantalla de créditos con las dimensiones de la ventana
     CreditsScreen credits(App.getSize().x, App.getSize().y);
@@ -169,8 +174,8 @@ int menuScreen::Run(sf::RenderWindow &App)
     // Cargar la textura de fondo desde un archivo
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile(FileSystem::getPath("Resources/Objects/menu/menu.png"))) { // Ruta absoluta al archivo de fondo
-    std::cerr << "Error loading background image" << std::endl;
-    return -1;
+        std::cerr << "Error loading background image" << std::endl;
+        return -1;
     }
 
     // Crear el sprite con la textura cargada
@@ -183,22 +188,18 @@ int menuScreen::Run(sf::RenderWindow &App)
 
     bool showCredits = false;
 
-	if (playing)
-	{
-		alpha = alpha_max;
-	}
-	int screen;
-	while (Running)
-	{
-		screen = handleInput(App, menu, showCredits, first);
-		if(screen != 0 )
-		{
-			return screen;
-		}; // Manejar la entrada del usuario
+    if (playing) {
+        alpha = alpha_max;
+    }
+    int screen;
+    while (Running) {
+        screen = handleInput(App, menu, showCredits, first);
+        if (screen != 0) {
+            return screen;
+        }; // Manejar la entrada del usuario
         render(App, menu, background, credits, showCredits); // Renderizar la escena
-        
-	}
+    }
 
-	//Never reaching this point normally, but just in case, exit the application
-	return (-1);
+    //Never reaching this point normally, but just in case, exit the application
+    return (-1);
 }
