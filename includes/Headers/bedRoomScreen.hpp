@@ -30,74 +30,12 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
     Model Bed_Wood(FileSystem::getPath("Resources/Objects/ROOM-BED/ROOM-BED.gltf"));
      // shaders de luz
     Shader lightingShader("lightingBed.vs", "lightingBed.fs");
-    Shader lightCubeShader("light_cube.vs", "light_cube.fs");
 
     // positions of the point lights
     glm::vec3 pointLightPositions[] = {
         glm::vec3(-94.678368f, 60.739445f, -1.130988f),
         glm::vec3(0.054742f, 61.230560f, 0.055358f)};
         
-
-    float vertices[] = {
-        // positions          // normals           // texture coords
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-
-        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-
-        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-        -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-
-        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
-        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
-    // first, configure the cube's VAO (and VBO)
-    unsigned int VBO;
-    glGenBuffers(1, &VBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
-    unsigned int lightCubeVAO;
-    glGenVertexArrays(1, &lightCubeVAO);
-    glBindVertexArray(lightCubeVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // note that we update the lamp's position attribute's stride to reflect the updated buffer data
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-
     // shader configuration
     // --------------------
     lightingShader.use();
@@ -119,7 +57,7 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
     //Time beetween sound  (seconds)
     float timeBetweenSounds = 15.0f; // main music
 
-    sf::sleep(sf::seconds(timeBetweenSounds));
+    //sf::sleep(sf::seconds(timeBetweenSounds));
 
     if (!music2.openFromFile(FileSystem::getPath("resources/audio/MothersWhistle.mp3")))
         return -1;
@@ -128,7 +66,7 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
     music2.setLoop(true);
     
 
-    sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
+    //sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
     // if (!music3.openFromFile(FileSystem::getPath("resources/audio/motherschatting.mp3")))
     //     return -1;
     // music3.setPosition(0, 1, 10);
@@ -244,67 +182,50 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
         // world transformation
         glm::mat4 model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
-        // also draw the lamp object(s)
-        lightCubeShader.use();
-        lightCubeShader.setMat4("projection", projection);
-        lightCubeShader.setMat4("view", view);
 
-        // we now draw as many light bulbs as we have point lights.
-        glBindVertexArray(lightCubeVAO);
-        for (unsigned int i = 0; i < sizeof(pointLightPositions) / sizeof(glm::vec3); i++)
-        {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, pointLightPositions[i]);
-            model = glm::scale(model, glm::vec3(1.0f)); // Make it a smaller cube
-            lightCubeShader.setMat4("model", model);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
-
-
-    
           //  glm::mat4 model = glm::mat4(1.0f);
-            lightingShader.use();
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, WoodPos); // translate it down so it's at the center of the scene
-            model = glm::scale(model, WoodScale);   // it's a bit too big for our scene, so scale it down
-            lightingShader.setMat4("model", model);
-            Bed_Wood.Draw(lightingShader);
+        lightingShader.use();
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, WoodPos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, WoodScale);   // it's a bit too big for our scene, so scale it down
+        lightingShader.setMat4("model", model);
+        Bed_Wood.Draw(lightingShader);
 
-            lightingShader.use();
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
-            model = glm::scale(model, maeScale);   // it's a bit too big for our scene, so scale it down
-            lightingShader.setMat4("model", model);
-            Bedroom.Draw(lightingShader);
-            App.display();
+        lightingShader.use();
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, maePos); // translate it down so it's at the center of the scene
+        model = glm::scale(model, maeScale);   // it's a bit too big for our scene, so scale it down
+        lightingShader.setMat4("model", model);
+        Bedroom.Draw(lightingShader);
+        App.display();
 
-            sf::Event event;
-            while (App.pollEvent(event))
+        sf::Event event;
+        while (App.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
             {
-                if (event.type == sf::Event::Closed)
-                {
-                    Running = false;
-                    App.close();
-                }
-                if (event.type == sf::Event::MouseMoved)
-                {
-                    sf::Vector2i center(App.getSize().x / 2, App.getSize().y / 2);
+                Running = false;
+                App.close();
+            }
+            if (event.type == sf::Event::MouseMoved)
+            {
+                sf::Vector2i center(App.getSize().x / 2, App.getSize().y / 2);
 
-                    float xoffset = sf::Mouse::getPosition(App).x - (float)center.x;
-                    float yoffset = (float)center.y - sf::Mouse::getPosition(App).y;
+                float xoffset = sf::Mouse::getPosition(App).x - (float)center.x;
+                float yoffset = (float)center.y - sf::Mouse::getPosition(App).y;
 
-                    camera.ProcessMouseMovement(xoffset, yoffset);
+                camera.ProcessMouseMovement(xoffset, yoffset);
 
-                    sf::Mouse::setPosition(sf::Vector2<int>((int)App.getSize().x / 2, (int)App.getSize().y / 2), App);
-                    // mouse_callback(App, event);
-                }
-                if (event.type == sf::Event::Resized)
-                {
-                    // adjust the viewport when the App is resized
-                    glViewport(0, 0, event.size.width, event.size.height);
-                }
+                sf::Mouse::setPosition(sf::Vector2<int>((int)App.getSize().x / 2, (int)App.getSize().y / 2), App);
+                // mouse_callback(App, event);
+            }
+            if (event.type == sf::Event::Resized)
+            {
+                // adjust the viewport when the App is resized
+                glViewport(0, 0, event.size.width, event.size.height);
             }
         }
+    }
         return -1;
     }
 }
