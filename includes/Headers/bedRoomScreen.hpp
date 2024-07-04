@@ -34,7 +34,9 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
 
     // positions of the point lights
     glm::vec3 pointLightPositions[] = {
-        glm::vec3(0.0f, 0.0f, 0.0f)};
+        glm::vec3(-94.678368f, 60.739445f, -1.130988f),
+        glm::vec3(0.054742f, 61.230560f, 0.055358f)};
+        
 
     float vertices[] = {
         // positions          // normals           // texture coords
@@ -115,20 +117,18 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
     music1.setLoop(true);
     music1.play();
     //Time beetween sound  (seconds)
-    float timeBetweenSounds = 20.0f; // main music
+    float timeBetweenSounds = 15.0f; // main music
 
-    // sf::sleep(sf::seconds(timeBetweenSounds));
+    sf::sleep(sf::seconds(timeBetweenSounds));
 
-    // if (!music2.openFromFile(FileSystem::getPath("resources/audio/MothersWhistle.mp3")))
-    //     return -1;
-    // music2.setPosition(0, 1, 10);
-    // music2.setVolume(70.0f); // adjust the volume
-    // music2.setLoop(true);
-    // music2.play();
-    // //sf::sleep(sf::seconds(timeBetweenSounds));
-    // music2.stop();
+    if (!music2.openFromFile(FileSystem::getPath("resources/audio/MothersWhistle.mp3")))
+        return -1;
 
-    // sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
+    music2.setVolume(70.0f); // adjust the volume
+    music2.setLoop(true);
+    
+
+    sf::sleep(sf::seconds(timeBetweenSounds - 5.0f));
     // if (!music3.openFromFile(FileSystem::getPath("resources/audio/motherschatting.mp3")))
     //     return -1;
     // music3.setPosition(0, 1, 10);
@@ -185,8 +185,11 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
 
             if (CheckCollision(camera, Bed_Wood, WoodPos, WoodScale))
             {
+                music2.stop();
                 Running = processInput(App, Bed_Wood, 1, stepSound, 3, WoodPos, WoodScale);
                 std::cout << "¡Colision detectada!" << std::endl;
+                music2.play();
+                music2.isRelativeToListener();
             }
 
             else
@@ -211,7 +214,7 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
 
         lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
         // iluminacion del ambiente, todos los objetos lo tienen
-        lightingShader.setVec3("dirLight.ambient", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
         // iluminacion donde si tiene el objeto
         lightingShader.setVec3("dirLight.diffuse", 0.04f, 0.04f, 0.04f);
         lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
@@ -223,8 +226,16 @@ int bedRoomScreen::Run(sf::RenderWindow &App)
         lightingShader.setVec3("pointLights[" + std::to_string(0) + "].diffuse", 1.0f, 1.0f, 1.0f);
         lightingShader.setVec3("pointLights[" + std::to_string(0) + "].specular", 1.0f, 1.0f, 1.0f);
         lightingShader.setFloat("pointLights[" + std::to_string(0) + "].constant", 1.0f);
-        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].linear", 0.022f);
-        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].quadratic", 0.0019f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].linear", 0.007f);
+        lightingShader.setFloat("pointLights[" + std::to_string(0) + "].quadratic", 0.0002f);
+         lightingShader.setVec3("pointLights[" + std::to_string(0) + "].position", pointLightPositions[0]);
+        // cambio de color tercero de ambiente y diffuse
+        lightingShader.setVec3("pointLights[" + std::to_string(1) + "].ambient", 0.5f, 0.5f, 0.5f);
+        lightingShader.setVec3("pointLights[" + std::to_string(1) + "].diffuse", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("pointLights[" + std::to_string(1) + "].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(1) + "].constant", 1.0f);
+        lightingShader.setFloat("pointLights[" + std::to_string(1) + "].linear", 0.007f);
+        lightingShader.setFloat("pointLights[" + std::to_string(1) + "].quadratic", 0.0002f);
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 2000.0f);
         glm::mat4 view = camera.GetViewMatrix();
