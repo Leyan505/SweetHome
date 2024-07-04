@@ -72,10 +72,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2 && indice != 3)
+            /*else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            } 
+            } */
     
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -88,10 +88,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2 && indice != 3)
+            /*else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
@@ -103,10 +103,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2 && indice != 3)
+            /*else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
@@ -118,10 +118,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2 && indice != 3)
+            /*else if (indice != 2 && indice != 3)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
     }
     else
@@ -136,10 +136,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2 && indice != 3 && indice != 5)
+            /*else if (indice != 2 && indice != 3 && indice != 5)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
@@ -151,10 +151,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2 && indice != 3 && indice != 5)
+            /*else if (indice != 2 && indice != 3 && indice != 5)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
@@ -166,10 +166,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2 && indice != 3 && indice != 5)
+            /*else if (indice != 2 && indice != 3 && indice != 5)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
@@ -181,10 +181,10 @@ bool processInput(sf::Window &App, const Model &modelo, int mode, sf::Sound &ste
                 stepSound.pause();
                 stepSound.play();
             }
-            else if (indice != 2 && indice != 3 && indice != 5)
+            /*else if (indice != 2 && indice != 3 && indice != 5)
             {
                 resolveCollision(camera, modelo, position, scale);
-            }
+            }*/
         }
     }
 
