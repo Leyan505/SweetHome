@@ -126,23 +126,37 @@ You also need to add ```C:\Program Files (x86)\GnuWin32\bin``` to the windows PA
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+Run the program, there will be a menu screen, you can choose from 6 options and when you select one you can come back to the menu by pressing ESCAPE:
+
 * Living room
 
 * Kitchen
-  <img src="readme/kitchen.png" alt="kitchen" width="1280" height="720">
+  
+  <img src="readme/kitchen.png" alt="kitchen" width="720" height="480">
+
 * Bedroom
   
 * Hallway
   
-  <img src="readme/hallway1.png" alt="hallway1" width="1280" height="720">
-  <img src="readme/hallway2.png" alt="hallway2" width="1280" height="720">
+  <img src="readme/hallway1.png" alt="hallway1" width="720" height="480">
+  <img src="readme/hallway2.png" alt="hallway2" width="720" height="480">
   
 * House
-  <img src="readme/house.png" alt="house" width="1280" height="720">
+  
+  <img src="readme/house.png" alt="house" width="720" height="480">
+
+* Credits
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- ACKNOWLEDGMENTS -->
+## Colaborators
+* [Andres Guido](https://github.com/Leyan505)
+* [Lia Cruz](https://github.com/caelruz4)
+* [Eloisse Molina](https://github.com/Elomolina)
+* [Jorge Lopez](https://github.com/1JorgeUni1)
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
  
 <!-- LICENSE -->
 ## License
